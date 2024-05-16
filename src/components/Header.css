@@ -1,0 +1,31 @@
+.header {
+    background-color: #fff;
+    position: relative;
+    height: 100vh; /* Imposta l'altezza secondo le tue esigenze */
+    overflow: hidden;
+  }
+  
+  .svg-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+  
+  .wave {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    animation: move 5s linear infinite; /* Aggiunge l'animazione */
+  }
+  
+  @keyframes move {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }

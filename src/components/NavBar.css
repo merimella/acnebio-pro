@@ -1,0 +1,68 @@
+.navbar {
+    transition: background-color 0.3s ease, padding 0.3s ease;
+    background-color: rgba(255, 255, 255, 0); /* Trasparente all'inizio */
+    color: #ff5c35;
+  }
+  
+  .navbar.opaque {
+    background-color: rgba(255, 255, 255, 0.9); /* Opacità minima allo scroll */
+  }
+  
+  .navbar.expand {
+    padding-top: 10px;
+  }
+  
+  .navbar.shrink {
+    padding-top: 0px;
+  }
+  
+  .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 92, 53, 0.7%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  .navbar-brand {
+    color: #ff5c35 !important;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-item {
+    margin: 0 15px;
+  }
+  
+  .nav-link {
+    font-size: 1.8rem; /* Dimensione maggiore per l'effetto di caricamento */
+    color: #ff5c35 !important;
+    text-decoration: none;
+    margin: 0 30px; /* Aggiungi margine extra per distanziare "ABOUT" e "SHOP" */
+    transition: font-size 0.3s ease, margin 0.3s ease;
+  }
+  
+  .nav-link.shrink {
+    font-size: 1.5rem;
+    margin: 0 15px;
+  }
+  
+  .sub-link {
+    font-size: 0.75rem;
+    color: #ff5c35;
+  }
+  
+  .logo.expand {
+    height: 50px; /* Dimensione maggiore per l'effetto di caricamento */
+    transition: height 0.3s ease;
+  }
+  
+  .logo.shrink {
+    height: 40px;
+    transition: height 0.3s ease;
+  }

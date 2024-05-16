@@ -1,23 +1,49 @@
-import logo from './logo.svg';
+import React from 'react';
+import Header from './components/Header';
+import NavBar from './components/NavBar';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NavBar />
+      <Header />
+      <section className="section" id="section1">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col text-center">
+              <h1>Benvenuto</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section" id="section2">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col text-center">
+              <h1>Chi Siamo</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section" id="section3">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col text-center">
+              <h1>Servizi</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section" id="section4">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col text-center">
+              <h1>Contatti</h1>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
