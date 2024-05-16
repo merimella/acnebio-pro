@@ -1,31 +1,33 @@
 .header {
-    background-color: #fff;
-    position: relative;
-    height: 100vh; /* Imposta l'altezza secondo le tue esigenze */
-    overflow: hidden;
+  background-color: #fff; /* Sfondo bianco */
+  position: relative;
+  height: 100vh; /* Imposta l'altezza secondo le tue esigenze */
+  overflow: hidden;
+}
+
+.svg-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 1; /* Aggiungi z-index per sovrapporre correttamente */
+}
+
+.wave {
+  position: relative;
+  display: block;
+  width: 200%; /* Aumenta la larghezza per creare l'effetto di movimento */
+  height: auto;
+  animation: moveWave 10s linear infinite; /* Aggiunge l'animazione */
+  z-index: 2; /* Assicurati che l'SVG abbia uno z-index superiore al background */
+}
+
+@keyframes moveWave {
+  0% {
+    transform: translateX(0);
   }
-  
-  .svg-container {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
+  100% {
+    transform: translateX(-50%);
   }
-  
-  .wave {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: auto;
-    animation: move 5s linear infinite; /* Aggiunge l'animazione */
-  }
-  
-  @keyframes move {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
-  }
+}

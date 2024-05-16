@@ -30,7 +30,7 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Brand className="mx-auto d-lg-none" href="#">
           <img
-            src={`${logo}?v=${new Date().getTime()}`} // Aggiungi un parametro di cache busting
+            src={logo}
             alt="Logo"
             className={`logo ${navbarShrink ? 'shrink' : 'expand'}`}
           />
@@ -43,7 +43,7 @@ const NavBar = () => {
             </Nav.Link>
             <Navbar.Brand href="#" className="d-none d-lg-block mx-auto">
               <img
-                src={`${logo}?v=${new Date().getTime()}`} // Aggiungi un parametro di cache busting
+                src={logo}
                 alt="Logo"
                 className={`logo ${navbarShrink ? 'shrink' : 'expand'}`}
               />
