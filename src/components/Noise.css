@@ -1,0 +1,27 @@
+.noise {
+    background-color: var(--c-grain-1);
+    -webkit-mask: url(//modechocolate.com/cdn/shop/t/38/assets/bg-mask.static.png?v=1202423…) no-repeat;
+    mask: url(//modechocolate.com/cdn/shop/t/38/assets/bg-mask.static.png?v=1202423…) no-repeat;
+}
+@media screen and (min-width: 50rem) {
+    .noise {
+        -webkit-mask-size: 100% !important;
+        top: -200px !important;
+    }
+}
+.noise {
+    bottom: 0;
+    left: 0;/* stylelint-disable-next-line */
+    -webkit-mask-size: 140% !important;
+    opacity: .7;
+    overflow: hidden;
+    position: fixed !important;
+    position: absolute;
+    right: 0;
+    top: -50px !important;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    width: 100%;
+    z-index: 0;
+}
