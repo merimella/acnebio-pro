@@ -1,23 +1,120 @@
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.header .img-fluid {
+  animation: float 5s ease-in-out infinite;
+}
 .header {
-  background-color: #fff; /* Sfondo bianco */
+  background-color: #fff; /* Colore di sfondo per l'header */
   position: relative;
-  height: 100vh; /* Imposta l'altezza secondo le tue esigenze */
+  height: 100vh; /* Copre tutta l'altezza della viewport */
+  width: 100%; /* Copre tutta la larghezza */
   overflow: hidden;
+ 
 }
 
-.svg-container {
-  position: relative;
-  bottom: 0;
+.header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  overflow: hidden;
-  line-height: 0;
-  z-index: 1; /* Aggiungi z-index per sovrapporre correttamente */
+  height: 100%;
+  background: url('../assets/header-sfondo.svg') no-repeat center center/cover; /* Imposta lo sfondo SVG */
+  opacity: 1; /* Imposta l'opacità dell'overlay */
+  z-index: 1; /* Assicurati che l'overlay sia sopra lo sfondo ma sotto gli altri contenuti */
 }
 
-.wave {
-  display: block;
-  height: auto;
-  z-index: 2; /* Assicurati che l'SVG abbia uno z-index superiore al background */
+.header .container {
+  position: relative;
+  z-index: 2; /* Posiziona il contenuto sopra l'overlay */
+}
+
+.header .row {
+  height: 100%; /* Assicura che la riga copra tutta l'altezza */
+}
+
+.header h1 {
+  color: #fff;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+  line-height: 30px;
+}
+
+.header h1 .highlight {
+  color: #ff5c35;
+  font-weight: 800;
+}
+
+.header h1 .trademark {
+  font-size: 1.5rem; /* Dimensione del simbolo di marchio */
+  margin-left: 0.2rem; /* Distanza dal testo "ACNEBIO" */
+  position: relative; /* Posizionamento relativo */
+  top: -0.9rem; /* Allinea il simbolo in alto */
+}
+
+.header h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+}
+
+.header .btn {
+  background-color: #ff5c35; /*quello di dietro*/
+  border: none;
+  color: #ff5c35; /*colore testo before*/
+  padding: 15px 30px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  border-radius: 16px; /* Arrotonda i bordi */
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  cursor: url(//modechocolate.com/cdn/shop/t/38/assets/img-cursor-small.static_small.png?v=6766561<) 0 0, pointer;
+  transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.header .btn::before {
+  content: '';
+  background-color: #fff; /*colore before pulsante*/
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px; /* Arrotonda i bordi */ 
+  z-index: -1;
+  transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.header .btn:hover::before {
+  top: 6px;
+  left: -6px;
+}
+
+.header .btn:hover {
+  transform: translate(-6px, 6px);
+  color: #ff5c35;
+}
+
+.header .btn:active {
+  background-color: #ff5c35;
+  transform: translate(0);
+}
+
+.header .btn span {
+  font-family: 'Termina Bold', sans-serif !important;
 }
 
 /*@keyframes moveWave {
