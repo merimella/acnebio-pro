@@ -6,7 +6,7 @@
 }
 
 .svg-container {
-  position: absolute;
+  position: relative;
   bottom: 0;
   width: 100%;
   overflow: hidden;
@@ -15,19 +15,33 @@
 }
 
 .wave {
-  position: relative;
   display: block;
-  width: 200%; /* Aumenta la larghezza per creare l'effetto di movimento */
   height: auto;
-  animation: moveWave 10s linear infinite; /* Aggiunge l'animazione */
   z-index: 2; /* Assicurati che l'SVG abbia uno z-index superiore al background */
 }
 
-@keyframes moveWave {
+/*@keyframes moveWave {
   0% {
     transform: translateX(0);
   }
   100% {
     transform: translateX(-50%);
+  }
+}*/
+
+/* Media query per schermi più piccoli */
+@media (max-width: 768px) {
+  .header {
+    height: auto; /* Permetti all'header di adattarsi al contenuto */
+  }
+
+  .svg-container {
+    height: auto; /* Permetti al contenitore SVG di adattarsi al contenuto */
+    bottom: 0; /* Mantieni l'SVG in basso */
+  }
+
+  .wave {
+    height: auto; /* Permetti all'SVG di adattarsi al contenitore */
+    min-height: 100vh; /* Assicurati che l'SVG copra almeno l'altezza della viewport */
   }
 }

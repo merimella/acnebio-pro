@@ -20,6 +20,7 @@
   color: #ff5c35 !important;
   margin: 0 1rem;
   transition: font-size 0.3s, padding 0.3s;
+  font-weight: 700;
 }
 
 .nav-link.shrink {
@@ -27,16 +28,17 @@
 }
 
 .navbar-brand img {
-  height: 40px; /* Dimensione del logo */
+  height: 30px; /* Dimensione del logo */
   transition: height 0.3s;
 }
 
 .navbar-brand img.shrink {
-  height: 30px; /* Dimensione del logo ridotta */
+  height: 20px; /* Dimensione del logo ridotta */
 }
 
 .sub-link {
   font-size: 0.75rem;
+  font-weight: 500;
   color: #ff5c35;
   display: block;
   margin-top: -5px;
