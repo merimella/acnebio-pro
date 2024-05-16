@@ -43,6 +43,29 @@
   height: 100%; /* Assicura che la riga copra tutta l'altezza */
 }
 
+
+.ellipse {
+  margin-left: 10px; /* Spazio tra il pulsante e l'ellisse */
+  width: 200px; /* Larghezza dell'ellisse */
+  height: 100px; /* Altezza dell'ellisse */
+  border: 2px solid #ff5c35; /* Colore del bordo */
+  border-radius: 50%; /* Trasforma il div in un'ellisse */
+  display: flex; /* Utilizza flexbox per centrare il testo */
+  align-items: center; /* Allinea verticalmente il testo */
+  justify-content: center; /* Allinea orizzontalmente il testo */
+  background-color: transparent; /* Sfondo trasparente */
+  position: absolute;
+  bottom: 250px;
+  right: 0px;
+}
+
+.ellipse span {
+  color: #ff5c35; /* Colore del testo */
+  font-weight: 700; /* Grassetto */
+  font-size: 1.2rem; /* Dimensione del testo */
+
+}
+
 .header h1 {
   color: #fff;
   font-size: 2.5rem;
@@ -71,41 +94,41 @@
 }
 
 .header .btn {
-  background-color: #ff5c35; /*quello di dietro*/
+  background-color: #ff5c35; /* Orange background */
   border: none;
-  color: #ff5c35; /*colore testo before*/
-  padding: 15px 30px;
+  color: #ff5c35; /* White text color */
+  padding: 15px 50px;
   font-size: 1.25rem;
   font-weight: 800;
-  border-radius: 16px; /* Arrotonda i bordi */
+  border-radius: 16px; /* Rounded corners */
   position: relative;
   overflow: hidden;
-  z-index: 1;
+  z-index: 1; /* Set z-index higher than the ::before pseudo-element */
   cursor: url(//modechocolate.com/cdn/shop/t/38/assets/img-cursor-small.static_small.png?v=6766561<) 0 0, pointer;
   transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .header .btn::before {
   content: '';
-  background-color: #fff; /*colore before pulsante*/
+  background-color: #fff; /* White background */
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 6px;
+  left: -6px;
   width: 100%;
   height: 100%;
-  border-radius: 16px; /* Arrotonda i bordi */ 
-  z-index: -1;
+  border-radius: 16px; /* Rounded corners */ 
+  z-index: -1; /* Set z-index lower than the button */
   transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .header .btn:hover::before {
-  top: 6px;
-  left: -6px;
+  top: 0;
+  left: 0;
 }
 
 .header .btn:hover {
-  transform: translate(-6px, 6px);
-  color: #ff5c35;
+  transform: translate(6px, -6px);
+  color: #ff5c35; /* Change text color to orange on hover */
 }
 
 .header .btn:active {

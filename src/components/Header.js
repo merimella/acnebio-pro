@@ -11,6 +11,9 @@ const Header = () => {
         <div className="row h-100 align-items-center">
           <div className="col-md-6">
             <img src={ciocco} alt="Cioccolato" className="img-fluid" />
+            <div className="ellipse">
+              <span>GUSTO CACAO*</span>
+            </div>
           </div>
           <div className="col-md-6 text-right">
             <h1>
