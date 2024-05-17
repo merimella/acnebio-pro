@@ -13,13 +13,13 @@
 .header .img-fluid {
   animation: float 5s ease-in-out infinite;
 }
+
 .header {
-  background-color: #fff; /* Colore di sfondo per l'header */
+  background-color: #fff;
   position: relative;
-  height: 100vh; /* Copre tutta l'altezza della viewport */
-  width: 100%; /* Copre tutta la larghezza */
+  height: 100vh;
+  width: 100%;
   overflow: hidden;
- 
 }
 
 .header::before {
@@ -29,41 +29,39 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('../assets/header-sfondo.svg') no-repeat center center/cover; /* Imposta lo sfondo SVG */
-  opacity: 1; /* Imposta l'opacità dell'overlay */
-  z-index: 1; /* Assicurati che l'overlay sia sopra lo sfondo ma sotto gli altri contenuti */
+  background: url('../assets/header-sfondo.svg') no-repeat center center/cover;
+  opacity: 1;
+  z-index: 1;
 }
 
 .header .container {
   position: relative;
-  z-index: 2; /* Posiziona il contenuto sopra l'overlay */
+  z-index: 2;
 }
 
 .header .row {
-  height: 100%; /* Assicura che la riga copra tutta l'altezza */
+  height: 100%;
 }
 
-
-.ellipse {
-  margin-left: 10px; /* Spazio tra il pulsante e l'ellisse */
-  width: 200px; /* Larghezza dell'ellisse */
-  height: 100px; /* Altezza dell'ellisse */
-  border: 2px solid #ff5c35; /* Colore del bordo */
-  border-radius: 50%; /* Trasforma il div in un'ellisse */
-  display: flex; /* Utilizza flexbox per centrare il testo */
-  align-items: center; /* Allinea verticalmente il testo */
-  justify-content: center; /* Allinea orizzontalmente il testo */
-  background-color: transparent; /* Sfondo trasparente */
+.header .ellipse {
+  margin-left: 10px;
+  width: 200px;
+  height: 100px;
+  border: 2px solid #ff5c35;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
   position: absolute;
   bottom: 250px;
   right: 0px;
 }
 
-.ellipse span {
-  color: #ff5c35; /* Colore del testo */
-  font-weight: 700; /* Grassetto */
-  font-size: 1.2rem; /* Dimensione del testo */
-
+.header .ellipse span {
+  color: #ff5c35;
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 .header h1 {
@@ -80,10 +78,10 @@
 }
 
 .header h1 .trademark {
-  font-size: 1.5rem; /* Dimensione del simbolo di marchio */
-  margin-left: 0.2rem; /* Distanza dal testo "ACNEBIO" */
-  position: relative; /* Posizionamento relativo */
-  top: -0.9rem; /* Allinea il simbolo in alto */
+  font-size: 1.5rem;
+  margin-left: 0.2rem;
+  position: relative;
+  top: -0.9rem;
 }
 
 .header h2 {
@@ -93,75 +91,21 @@
   font-weight: 800;
 }
 
-.header .btn {
-  background-color: #ff5c35; /* Orange background */
-  border: none;
-  color: #ff5c35; /* White text color */
-  padding: 15px 50px;
-  font-size: 1.25rem;
-  font-weight: 800;
-  border-radius: 16px; /* Rounded corners */
-  position: relative;
-  overflow: hidden;
-  z-index: 1; /* Set z-index higher than the ::before pseudo-element */
-  cursor: url(//modechocolate.com/cdn/shop/t/38/assets/img-cursor-small.static_small.png?v=6766561<) 0 0, pointer;
-  transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
-}
 
-.header .btn::before {
-  content: '';
-  background-color: #fff; /* White background */
-  position: absolute;
-  top: 6px;
-  left: -6px;
-  width: 100%;
-  height: 100%;
-  border-radius: 16px; /* Rounded corners */ 
-  z-index: -1; /* Set z-index lower than the button */
-  transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
-}
 
-.header .btn:hover::before {
-  top: 0;
-  left: 0;
-}
-
-.header .btn:hover {
-  transform: translate(6px, -6px);
-  color: #ff5c35; /* Change text color to orange on hover */
-}
-
-.header .btn:active {
-  background-color: #ff5c35;
-  transform: translate(0);
-}
-
-.header .btn span {
-  font-family: 'Termina Bold', sans-serif !important;
-}
-
-/*@keyframes moveWave {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}*/
-
-/* Media query per schermi più piccoli */
 @media (max-width: 768px) {
   .header {
-    height: auto; /* Permetti all'header di adattarsi al contenuto */
+    height: auto;
   }
 
   .svg-container {
-    height: auto; /* Permetti al contenitore SVG di adattarsi al contenuto */
-    bottom: 0; /* Mantieni l'SVG in basso */
+    height: auto;
+    bottom: 0;
+    overflow: visible;
   }
 
   .wave {
-    height: auto; /* Permetti all'SVG di adattarsi al contenitore */
-    min-height: 100vh; /* Assicurati che l'SVG copra almeno l'altezza della viewport */
+    height: auto;
+    min-height: 100vh;
   }
 }

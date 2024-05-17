@@ -1,6 +1,9 @@
 import React from 'react';
 import Header from './components/Header';
 import NavBar from './components/NavBar';
+import SectionContent from './components/SectionContent';
+import Slider from './components/Slider'; // Import the new component
+import SectionIngredienti from './components/SectionIngredienti'; // Import the new SectionIngredienti component
 import './App.css';
 
 function App() {
@@ -10,20 +13,13 @@ function App() {
       <Header />
       <section className="section" id="section1">
         <div className="container">
-          <div className="row justify-content-center">
-            <div className="col text-center">
-              <h1>Benvenuto</h1>
-            </div>
-          </div>
+          <SectionContent />
         </div>
       </section>
       <section className="section" id="section2">
         <div className="container">
-          <div className="row justify-content-center">
-            <div className="col text-center">
-              <h1>Chi Siamo</h1>
-            </div>
-          </div>
+          <SectionIngredienti /> {/* Add the SectionIngredienti component */}
+          <Slider /> {/* Use the new component */}
         </div>
       </section>
       <section className="section" id="section3">

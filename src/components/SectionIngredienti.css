@@ -1,0 +1,89 @@
+/* SectionIngredienti.css */
+.section-ingredienti {
+  position: relative;
+  margin: 20px auto;
+  padding-top: 100px; /* Altezza della scritta fissa */
+  font-family: 'Termina', sans-serif; /* Assicurati che il font sia correttamente importato */
+}
+
+.ingredienti-title {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.ingredienti-shape-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.ingredienti-shape {
+  width: 100px;
+  height: auto;
+}
+
+.shape-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.8em;
+  text-align: center;
+}
+
+.ingredienti-main-title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.highlight {
+  color: #ff6600;
+}
+
+.ingredienti-description {
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.ingredienti-icon {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+
+.ingredienti-subtitle {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.ingredienti-text {
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.ingredienti-reference {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Stili per il testo ripetuto */
+.text-scroll-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.text-scroll {
+  display: inline-block;
+  font-size: 3em; /* Dimensione del testo, modifica secondo le tue preferenze */
+  font-weight: 800;
+  background: linear-gradient(to right, white, orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
