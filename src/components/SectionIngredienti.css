@@ -2,7 +2,6 @@
 .section-ingredienti {
   position: relative;
   margin: 20px auto;
-  padding-top: 100px; /* Altezza della scritta fissa */
   font-family: 'Termina', sans-serif; /* Assicurati che il font sia correttamente importato */
 }
 
@@ -64,26 +63,10 @@
 
 .ingredienti-reference {
   font-size: 0.8em;
-  color: #666;
+  color: #ff6600;
   margin-top: 10px;
 }
 
-/* Stili per il testo ripetuto */
-.text-scroll-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  overflow: hidden;
-}
 
-.text-scroll {
-  display: inline-block;
-  font-size: 3em; /* Dimensione del testo, modifica secondo le tue preferenze */
-  font-weight: 800;
-  background: linear-gradient(to right, white, orange);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  white-space: nowrap;
-}
+
+

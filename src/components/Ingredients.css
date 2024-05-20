@@ -1,0 +1,27 @@
+/* src/Ingredients.css */
+
+@keyframes scrollLeft {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .ingredients-title-container {
+    overflow: hidden;
+    width: 200%; /* Ensure it covers both scrolling texts */
+    position: relative;
+    
+  }
+  
+  .scrolling-text {
+    display: inline-block;
+    font-size: 7rem; /* Increased font size */
+    color: #ff5c35;
+    text-transform: uppercase;
+    animation: scrollLeft 40s linear infinite; /* Slower continuous scroll */
+    white-space: nowrap;
+  }
+  

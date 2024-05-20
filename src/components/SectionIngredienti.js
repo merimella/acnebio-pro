@@ -6,10 +6,10 @@ import { ReactComponent as FormaArancione } from '../assets/forma-arancione.svg'
 
 const SectionIngredienti = () => {
   const lottieRef = useRef(null); // Crea un riferimento per l'animazione Lottie
+  
 
   return (
     <div className="section-ingredienti container">
-      <h1 className="ingredienti-title text-center">INGREDIENTI</h1>
       <div className="row align-items-center mb-4">
         <div className="col-md-3 text-center text-md-right">
           <div className="ingredienti-shape-container">
