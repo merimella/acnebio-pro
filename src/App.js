@@ -1,19 +1,27 @@
-// src/App.js
+// App.js
 import React, { useEffect } from 'react';
 import Header from './components/Header';
 import NavBar from './components/NavBar';
 import SectionContent from './components/SectionContent';
-import Slider from './components/Slider'; // Import the new component
-import SectionIngredienti from './components/SectionIngredienti'; // Import the new SectionIngredienti component
-import Ingredients from './components/Ingredients';
+import Slider from './components/Slider';
+import SectionIngredienti from './components/SectionIngredienti';
+import Section3 from './components/Section3';
+import ModoUso from './components/ModoUso';
+import Contact from './components/Contacts'; // Importa il nuovo componente
 import './App.css';
 
 function App() {
   useEffect(() => {
     const handleScroll = () => {
-      const ingredientiSection = document.querySelector('.ingredienti');
-      if (ingredientiSection && window.scrollY + window.innerHeight >= ingredientiSection.offsetTop) {
-        ingredientiSection.classList.add('start-animation');
+      const section3 = document.getElementById('section3');
+      const sectionTop = section3.getBoundingClientRect().top;
+      const sectionHeight = section3.offsetHeight;
+      const viewportHeight = window.innerHeight;
+
+      if (sectionTop <= viewportHeight / 2 && sectionTop >= -sectionHeight / 2) {
+        section3.classList.add('bg-transition');
+      } else {
+        section3.classList.remove('bg-transition');
       }
     };
 
@@ -23,6 +31,7 @@ function App() {
 
   return (
     <div className="App">
+      <div className="noise-overlay"></div>
       <NavBar />
       <Header />
       <section className="section" id="section1">
@@ -30,33 +39,21 @@ function App() {
           <SectionContent />
         </div>
       </section>
-      <div className="ingredienti">
-        <Ingredients />
-      </div>
       <section className="section" id="section2">
         <div className="container">
-          <SectionIngredienti /> {/* Add the SectionIngredienti component */}
-          <div id="slider"><Slider /> {/* Use the new component */}</div>
-          </div>
+          <SectionIngredienti />
+          <div id="slider"><Slider /></div>
+        </div>
       </section>
       <section className="section" id="section3">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col text-center">
-              <h1>Servizi</h1>
-            </div>
-          </div>
-        </div>
+        <Section3 />
       </section>
       <section className="section" id="section4">
         <div className="container">
-          <div className="row justify-content-center">
-            <div className="col text-center">
-              <h1>Contatti</h1>
-            </div>
-          </div>
+          <ModoUso />
         </div>
       </section>
+      <Contact /> {/* Utilizza il componente Contact */}
     </div>
   );
 }

@@ -1,61 +1,97 @@
-import React, { useEffect, useRef } from 'react';
+// src/components/SectionContent.js
+import React, { useRef, useEffect, useState } from 'react';
 import './SectionContent.css';
-import acnebioImage from '../assets/acnebio-image.png'; // Ensure the path is correct
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import acnebioImage from '../assets/acnebio-image.png'; // Assicurati che il percorso sia corretto
 import glutenFreeIcon from '../assets/gluten-free.svg';
 import lattosioFreeIcon from '../assets/lattosio-free.svg';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const SectionContent = () => {
-  const lineRefs = useRef([]);
+  const sectionRef = useRef(null);
+  const imageRef = useRef(null);
+  const textRef = useRef(null);
+  const iconContainerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
-    const handleScroll = () => {
-      lineRefs.current.forEach(ref => {
-        if (ref) {
-          const rect = ref.getBoundingClientRect();
-          if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
-            ref.classList.add('in-view');
-          } else {
-            ref.classList.remove('in-view');
-          }
-        }
-      });
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const paragraphLines = [
-    "Acnebio PRO è un integratore alimentare al gusto cacao",
-    "a base di probiotici vivi (SACCHAROMYCES Cerevisiae)",
-    "vitamine e minerali che contribuiscono al mantenimento di una pelle normale.",
-    "Adatto a vegetariani e vegani.",
-    "Senza glutine e lattosio."
-  ];
+  useEffect(() => {
+    gsap.fromTo(
+      textRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        scrollTrigger: {
+          trigger: textRef.current,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+
+    gsap.fromTo(
+      imageRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        scrollTrigger: {
+          trigger: imageRef.current,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+
+    gsap.fromTo(
+      iconContainerRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        scrollTrigger: {
+          trigger: iconContainerRef.current,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+  }, []);
 
   return (
-    <div className="section-content">
-      <img src={acnebioImage} alt="Acnebio" className="section-image" />
-      <div className="section-paragraph">
-        {paragraphLines.map((line, index) => (
-          <p
-            key={index}
-            ref={el => (lineRefs.current[index] = el)}
-            className="paragraph-line"
-          >
-            {line}
-          </p>
-        ))}
-      </div>
-      <div className="section-icons-ellipse">
+    <div ref={sectionRef} className="section-content">
+      <img ref={imageRef} src={acnebioImage} alt="Acnebio" className="section-image" />
+      <p ref={textRef} className="section-paragraph">
+        <b>Acnebio PRO</b> è un integratore alimentare a base di probiotici vivi (Saccharomyces cerevisiae 3 miliardi per razione giornaliera), vitamine e minerali. Niacina, biotina, zinco e vitamina A contribuiscono al mantenimento di una pelle normale. Adatto a vegetariani e vegani.
+      </p>
+      <div ref={iconContainerRef} className="section-icons-ellipse">
         <div className="section-icons">
-          <img src={glutenFreeIcon} alt="Senza Glutine" className="icon" />
-          <img src={lattosioFreeIcon} alt="Senza Lattosio" className="icon" />
-        </div>
-        <div className="ellipse">
-          <span>100% VEGANO</span>
+          <div className="icon-item">
+            <img src={glutenFreeIcon} alt="Senza Glutine" className="icon" />
+            <p>Senza Glutine</p>
+          </div>
+          <div className="icon-item">
+            <img src={lattosioFreeIcon} alt="Senza Lattosio" className="icon" />
+            <p>Senza Lattosio</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,15 +1,16 @@
+/* NavBar.css */
 .navbar {
-  background: transparent; /* Navbar trasparente */
+  background: transparent;
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 3; /* Navbar sopra l'SVG */
+  z-index: 3; /* Navbar above noise overlay */
   padding: 1rem;
   transition: background-color 0.3s, padding 0.3s;
 }
 
 .navbar.opaque {
-  background: rgba(8, 55, 140, 0.9); /* Sfondo opaco */
+  background: rgba(8, 55, 140, 0.9);
 }
 
 .navbar.shrink {
@@ -28,12 +29,12 @@
 }
 
 .navbar-brand img {
-  height: 30px; /* Dimensione del logo */
+  height: 30px;
   transition: height 0.3s;
 }
 
 .navbar-brand img.shrink {
-  height: 20px; /* Dimensione del logo ridotta */
+  height: 20px;
 }
 
 .sub-link {
@@ -49,18 +50,29 @@
   font-size: 0.65rem;
 }
 
-/* Media Query per il responsive design */
+.navbar-toggler {
+  border: none;
+  background: transparent !important;
+  outline: none;
+}
+
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Media Query for responsive design */
 @media (max-width: 768px) {
   .navbar-brand img {
-    height: 30px; /* Dimensione del logo ridotta per schermi piccoli */
+    height: 30px;
   }
 
   .navbar-brand img.shrink {
-    height: 20px; /* Dimensione del logo ancora più ridotta */
+    height: 20px;
   }
 
   .nav-link {
-    margin: 0 0.5rem; /* Riduci il margine tra i link per schermi piccoli */
+    margin: 0 0.5rem;
   }
 
   .nav-link.shrink {
@@ -73,5 +85,9 @@
 
   .navbar.shrink .sub-link {
     font-size: 0.5rem;
+  }
+
+  .navbar {
+    padding: 0.5rem; /* Adjust padding for smaller screens */
   }
 }

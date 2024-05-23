@@ -1,8 +1,10 @@
-/* SectionIngredienti.css */
+/* src/components/SectionIngredienti.css */
 .section-ingredienti {
   position: relative;
   margin: 20px auto;
-  font-family: 'Termina', sans-serif; /* Assicurati che il font sia correttamente importato */
+  font-family: 'Termina', sans-serif;
+  z-index: 2; /* Ensure section ingredienti is above noise overlay */
+  padding: 20px;
 }
 
 .ingredienti-title {
@@ -42,31 +44,50 @@
 .ingredienti-description {
   margin-top: 10px;
   font-size: 1em;
+  text-align: justify; /* Justifica il testo */
 }
 
-.ingredienti-icon {
-  width: 150px;
-  height: 150px;
-  margin: 0 auto;
+.section-ingredienti h1 {
+  font-size: 2.5em;
+  margin-bottom: 70px;
+  color: #ff5c35; /* Colore arancione per il titolo */
+  text-transform: uppercase; /* Maiuscolo */
+  font-weight: 800; /* Peso del font 800 */
+  text-align: center; /* Center text */
 }
 
-.ingredienti-subtitle {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-top: 10px;
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .section-ingredienti {
+    padding: 40px 20px; /* Add padding for smaller screens */
+  }
+
+  .ingredienti-shape-container,
+  .ingredienti-main-title,
+  .highlight,
+  .ingredienti-description,
+  .ingredienti-icon,
+  .ingredienti-subtitle,
+  .ingredienti-text {
+    margin-bottom: 10px;
+  }
+
+  .ingredienti-shape-container {
+    margin-bottom: 20px; /* Add margin bottom to the orange shape */
+  }
+
+  .ingredienti-shape-container,
+  .ingredienti-main-title,
+  .highlight,
+  .ingredienti-description {
+    display: block;
+    text-align: center;
+  }
+
+  .ingredienti-icon,
+  .ingredienti-subtitle,
+  .ingredienti-text {
+    display: block;
+    text-align: center;
+  }
 }
-
-.ingredienti-text {
-  margin-top: 10px;
-  font-size: 1em;
-}
-
-.ingredienti-reference {
-  font-size: 0.8em;
-  color: #ff6600;
-  margin-top: 10px;
-}
-
-
-
-

@@ -1,70 +1,100 @@
-/* SectionContent.css */
-
+/* src/components/SectionContent.css */
 .section-content {
-  position: relative;
-  padding: 60px 20px; /* Adjust as needed */
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px; /* Larger max width for larger screens */
+  margin: 0 auto;
+  padding: 20px;
+  z-index: 2; /* Ensure section content is above noise overlay */
+}
+
+@media (max-width: 1600px) {
+  .section-content {
+    max-width: 1000px; /* Medium screens */
+  }
+}
+
+@media (max-width: 1200px) {
+  .section-content {
+    max-width: 800px; /* Smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .section-content {
+    max-width: 90%; /* Mobile screens */
+  }
 }
 
 .section-image {
-  max-width: 100%;
+  width: 70%; /* Adjust size as needed */
   height: auto;
-  display: block;
-  margin: 0 auto 20px; /* Center image and add bottom margin */
-  max-height: 800px; /* Adjust the maximum height */
+  margin-bottom: 20px;
+  animation: float 5s ease-in-out infinite; /* Add floating animation */
 }
 
 .section-paragraph {
-  font-size: 1.5rem; /* Increase font size */
-  line-height: 1.6;
-}
-
-.paragraph-line {
-  opacity: 0.5; /* Initial opacity */
-  transform: translateX(-50px); /* Initial slide position */
-  transition: opacity 1s ease-out, transform 1s ease-out; /* Smooth transition */
-}
-
-.paragraph-line.in-view {
-  opacity: 1;
-  transform: translateX(0);
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-align: justify; /* Justify the text */
+  width: 100%;
 }
 
 .section-icons-ellipse {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-top: 20px;
+  width: 100%;
+  align-items: center; /* Center align icons */
+  margin-bottom: 20px; /* Add margin below the icons */
 }
 
 .section-icons {
   display: flex;
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
 }
 
 .icon {
-  width: 50px;
-  height: 50px;
+  width: 80px; /* Adjust size as needed */
+  height: 80px;
+  margin-bottom: 5px; /* Space between icon and text */
 }
 
+.icon-item p {
+  margin-top: 5px;
+  font-size: 0.9em;
+}
 
-
-/* Media queries for responsive design */
+/* Responsive Styles */
 @media (max-width: 768px) {
-  .section-paragraph {
-    font-size: 1.2rem;
-  }
-
-  .icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .ellipse {
-    padding: 5px 10px;
+  .section-content {
+    text-align: center;
   }
 
   .section-image {
-    max-height: 200px; /* Adjust the maximum height for smaller screens */
+    width: 90%; /* Make the image larger on mobile */
+  }
+
+  .section-paragraph {
+    font-size: 1rem;
+  }
+
+  .section-icons {
+    flex-direction: row;
+  }
+
+  .icon-item {
+    margin-right: 10px;
   }
 }

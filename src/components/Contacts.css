@@ -1,0 +1,63 @@
+/* Contact.css */
+.contact-section {
+  padding: 60px 20px;
+  color: #fff;
+  text-align: center;
+  z-index: 3; /* Ensure the contact section is above the noise overlay */
+  position: relative;
+}
+
+.contact-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-logo {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.product-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.product-logo span {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.roydermal-logo {
+  width: 150px;
+}
+
+.contact-content p {
+  font-size: 1rem;
+  margin: 10px 0;
+}
+
+.contact-content a {
+  color: #ff5c35;
+  text-decoration: none;
+}
+
+.contact-content a:hover {
+  text-decoration: underline;
+}
+
+.social-icons {
+  margin-top: 20px;
+}
+
+.social-icons a {
+  color: #ff5c35;
+  font-size: 2rem;
+  margin: 0 10px;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #fff;
+}

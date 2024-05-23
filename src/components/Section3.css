@@ -1,0 +1,85 @@
+/* src/components/Section3.css */
+.section-3 {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    height: 100vh; /* Assicura che la sezione occupi l'intera altezza della finestra */
+    position: relative;
+    z-index: 3; /* Ensure section content is above noise overlay */
+  }
+  
+  .section-3 .container {
+    max-width: 1200px;
+  }
+  
+  .section-3 h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .intestino-icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+  }
+  
+  .title-wrapper {
+    display: inline-block;
+  }
+  
+  .asse-text {
+    font-weight: 300; /* Peso leggero */
+  }
+  
+  .cute-intestino {
+    font-weight: 700; /* Peso 700 */
+  }
+  
+  .section-3 p {
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
+  
+  /* Stili per il layout delle colonne */
+  .section-3 .col-md-6 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+  .section-3 .text-left {
+    text-align: left;
+  }
+  
+  /* Animazioni */
+  .section-3 [ref] {
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  
+  /* Stili responsive */
+  @media (max-width: 768px) {
+    .section-3 {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .section-3 .col-md-6 {
+      width: 100%;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+  
+    .section-3 .text-left {
+      text-align: center;
+      align-items: center;
+    }
+  
+    .section-3 p {
+      text-align: justify; /* Giustifica i paragrafi su mobile */
+    }
+  }
+  

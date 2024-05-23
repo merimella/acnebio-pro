@@ -1,75 +1,43 @@
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-.header .img-fluid {
-  animation: float 5s ease-in-out infinite;
-}
+/* Header.css */
 
 .header {
-  background-color: #fff;
   position: relative;
   height: 100vh;
   width: 100%;
   overflow: hidden;
-}
-
-.header::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('../assets/header-sfondo.svg') no-repeat center center/cover;
-  opacity: 1;
-  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centering content */
+  padding: 20px; /* Add padding for smaller screens */
+  z-index: 2; /* Ensure header is above noise overlay */
+  background: url(/src/assets/header-sfondo-5.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .header .container {
   position: relative;
-  z-index: 2;
-}
-
-.header .row {
   height: 100%;
+  z-index: 3;
+  max-width: 1200px; /* Limit the max width for larger screens */
+  width: 100%;
+  padding: 0 15px; /* Add padding for responsiveness */
 }
 
-.header .ellipse {
-  margin-left: 10px;
-  width: 200px;
-  height: 100px;
-  border: 2px solid #ff5c35;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  position: absolute;
-  bottom: 250px;
-  right: 0px;
-}
-
-.header .ellipse span {
-  color: #ff5c35;
-  font-weight: 700;
-  font-size: 1.2rem;
+.header img.img-fluid {
+  width: 100%;
+  max-width: 500px;
+  height: auto; /* Ensure the image is responsive */
+  margin-top: 60px; /* Add margin-top for the image in mobile view */
 }
 
 .header h1 {
   color: #fff;
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   margin-bottom: 0.5rem;
   font-weight: 800;
-  line-height: 30px;
+  text-align: left; /* Align text to the left */
+  white-space: nowrap; /* Prevent the text from wrapping */
 }
 
 .header h1 .highlight {
@@ -78,7 +46,7 @@
 }
 
 .header h1 .trademark {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin-left: 0.2rem;
   position: relative;
   top: -0.9rem;
@@ -86,26 +54,101 @@
 
 .header h2 {
   color: #fff;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 1.5rem;
   font-weight: 800;
+  text-align: left; /* Align text to the left */
 }
 
+.ellisse {
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  width: 200px;
+  height: 100px;
+  opacity: 0; /* Start hidden */
+}
 
+.ellisse svg ellipse {
+  fill: transparent;
+  stroke: #ff5c35;
+  stroke-width: 2px;
+  animation: stroke-animation 2s infinite;
+}
 
-@media (max-width: 768px) {
+.ellisse svg text {
+  fill: #ff5c35;
+  font-size: 16px;
+  font-weight: bold;
+  animation: slide-in-out 4s infinite;
+}
+
+@keyframes stroke-animation {
+  0% {
+    stroke-dasharray: 0 100%;
+  }
+  50% {
+    stroke-dasharray: 100% 0;
+  }
+  100% {
+    stroke-dasharray: 0 100%;
+  }
+}
+
+@keyframes slide-in-out {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  25%, 75% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 900px) {
   .header {
-    height: auto;
+    height: auto; /* Adjust height for smaller screens */
+    padding: 40px 0;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start; /* Align items to the left */
   }
 
-  .svg-container {
-    height: auto;
-    bottom: 0;
-    overflow: visible;
+  .header img.img-fluid {
+    margin-top: 20px; /* Reduce margin-top for smaller screens */
+    margin-bottom: 20px; /* Add margin-bottom to separate from texts */
   }
 
-  .wave {
-    height: auto;
-    min-height: 100vh;
+  .header .container {
+    text-align: left; /* Align text and button to the left */
+    margin-bottom: 200px;
+  }
+
+  .header h1 {
+    font-size: 2.3rem; /* Adjust font size for smaller screens */
+    white-space: nowrap; /* Prevent the text from wrapping */
+  }
+
+  .header h2 {
+    font-size: 2rem; /* Adjust font size for smaller screens */
+  }
+
+  .header .btn {
+    margin-bottom: 20px; /* Add margin below the button */
+    text-align: left; /* Align button text to the left */
+  }
+
+  .header h1 .highlight {
+    color: #ff5c35;
+    font-weight: 800;
+    display: inline;
+  }
+  
+  .ellisse {
+    top: 5%;
+    right: 5%;
+    width: 150px;
+    height: 75px;
   }
 }
