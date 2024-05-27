@@ -1,6 +1,6 @@
 // src/components/Section3.js
 import React, { useRef, useEffect, useState } from 'react';
-import './Section3.css';
+import '../styles/Section3.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import focusImage from '../assets/young-boy.png';
@@ -81,7 +81,7 @@ const Section3 = () => {
         <div className="row align-items-center">
           <div className="col-md-6 text-left" ref={textRef}>
             <h2>
-              <img src={intestinoSVG} alt="Intestino Icon" className="intestino-icon" />
+              <img src={intestinoSVG} alt="Intestino" className="intestino-icon" />
               <div className="title-wrapper">
                 <span className="asse-text">asse</span><br />
                 <span className="cute-intestino">cute · intestino</span>
@@ -94,7 +94,7 @@ const Section3 = () => {
             <img
               ref={imageRef}
               src={isMobile ? mobileImage : focusImage} // Cambia immagine in base alla dimensione dello schermo
-              alt="Focus Image"
+              alt="Focus"
               className="img-fluid"
             />
           </div>

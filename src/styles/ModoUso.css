@@ -1,0 +1,73 @@
+/* src/components/ModoUso.css */
+.modo-uso {
+  padding: 40px 20px;
+  color: #fff;
+  text-align: center;
+}
+
+.modo-uso .container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.modo-uso h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #ff5c35; /* Colore arancione per il titolo */
+  text-transform: uppercase; /* Maiuscolo */
+  font-weight: 800; /* Peso del font 800 */
+}
+
+.modo-uso ol {
+  list-style-type: none; /* Rimuove la lista numerata */
+  padding-left: 0;
+}
+
+.modo-uso ol li {
+  margin-bottom: 30px; /* Aumenta lo spazio tra i punti della lista */
+  font-size: 1.2em;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column; /* Imposta le icone sopra il testo */
+  align-items: center; /* Centra le icone e il testo */
+  text-align: center; /* Centra il testo */
+}
+
+.modo-uso .icon {
+  width: 200px;  /* Aumenta la larghezza dell'icona */
+  height: 200px; /* Aumenta l'altezza dell'icona */
+  margin-bottom: 15px; /* Spazio tra icona e testo */
+}
+
+/* Classe aggiunta per il testo più piccolo */
+.small-text {
+  font-size: 0.8em;
+  white-space: nowrap; /* Impedisce il testo di andare a capo */
+  padding: 0 10px; /* Aumenta il padding per dare più spazio */
+}
+
+/* Animazioni */
+.modo-uso [ref] {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .modo-uso {
+    padding: 20px 10px;
+  }
+
+  .modo-uso h2 {
+    font-size: 2em;
+  }
+
+  .modo-uso ol li {
+    font-size: 1em;
+  }
+
+  .modo-uso .icon {
+    width: 150px;  /* Dimensioni delle icone su mobile */
+    height: 150px; /* Dimensioni delle icone su mobile */
+  }
+}

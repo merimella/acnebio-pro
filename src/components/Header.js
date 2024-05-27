@@ -1,7 +1,7 @@
 // Header.js
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import './Header.css';
+import '../styles/Header.css';
 import ciocco from '../assets/cioccolato.png';
 
 const Header = () => {
@@ -43,9 +43,9 @@ const Header = () => {
               ACNEBIO<sup className="trademark">®</sup> <span className="highlight">PRO</span>
             </h1>
             <h2 ref={subtitleRef}>IL PRIMO CIOCCOLATO* CONTRO L'ACNE</h2>
-            <a href="https://roydermal.it/prodotto/acnebio-pro-stimpack/" ref={buttonRef} className="btn">
+            <button className="btn" href="https://roydermal.it/prodotto/acnebio-pro-stimpack/" ref={buttonRef}>
               <span>ACQUISTA</span>
-            </a>
+            </button>
           </div>
         </div>
         <div className="ellisse" ref={ellisseRef}>

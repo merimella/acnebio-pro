@@ -1,6 +1,5 @@
-// src/components/SectionContent.js
 import React, { useRef, useEffect, useState } from 'react';
-import './SectionContent.css';
+import '../styles/SectionContent.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import acnebioImage from '../assets/acnebio-image.png'; // Assicurati che il percorso sia corretto
@@ -24,7 +23,7 @@ const SectionContent = () => {
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [setIsMobile]);
 
   useEffect(() => {
     gsap.fromTo(
@@ -83,16 +82,29 @@ const SectionContent = () => {
         <b>Acnebio PRO</b> è un integratore alimentare a base di probiotici vivi (Saccharomyces cerevisiae 3 miliardi per razione giornaliera), vitamine e minerali. Niacina, biotina, zinco e vitamina A contribuiscono al mantenimento di una pelle normale. Adatto a vegetariani e vegani.
       </p>
       <div ref={iconContainerRef} className="section-icons-ellipse">
-        <div className="section-icons">
-          <div className="icon-item">
-            <img src={glutenFreeIcon} alt="Senza Glutine" className="icon" />
-            <p>Senza Glutine</p>
+        {isMobile ? (
+          <div className="section-icons">
+            <div className="icon-item">
+              <img src={glutenFreeIcon} alt="Senza Glutine" className="icon" />
+              <p>Senza Glutine</p>
+            </div>
+            <div className="icon-item">
+              <img src={lattosioFreeIcon} alt="Senza Lattosio" className="icon" />
+              <p>Senza Lattosio</p>
+            </div>
           </div>
-          <div className="icon-item">
-            <img src={lattosioFreeIcon} alt="Senza Lattosio" className="icon" />
-            <p>Senza Lattosio</p>
+        ) : (
+          <div className="section-icons">
+            <div className="icon-item">
+              <img src={glutenFreeIcon} alt="Senza Glutine" className="icon" />
+              <p>Senza Glutine</p>
+            </div>
+            <div className="icon-item">
+              <img src={lattosioFreeIcon} alt="Senza Lattosio" className="icon" />
+              <p>Senza Lattosio</p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

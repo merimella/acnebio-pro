@@ -4,7 +4,7 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 import logo from '../assets/logo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import './NavBar.css';
+import '../styles/NavBar.css';
 
 const NavBar = () => {
   const [navbarOpaque, setNavbarOpaque] = useState(false);

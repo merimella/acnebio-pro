@@ -1,6 +1,5 @@
-// src/components/SectionIngredienti.js
 import React, { useEffect, useRef } from 'react';
-import './SectionIngredienti.css';
+import '../styles/SectionIngredienti.css';
 import Lottie from 'lottie-react';
 import celluleAnimation from '../assets/cellule.json'; // Importa il file JSON
 import { ReactComponent as FormaArancione } from '../assets/forma-arancione.svg'; // Importa l'SVG come componente React
@@ -12,10 +11,10 @@ gsap.registerPlugin(ScrollTrigger);
 const SectionIngredienti = () => {
   const lottieRef = useRef(null); // Crea un riferimento per l'animazione Lottie
   const sectionRef = useRef(null);
-  const stepRefs = [useRef(null), useRef(null)];
+  const stepRefs = useRef([React.createRef(), React.createRef()]);
 
   useEffect(() => {
-    stepRefs.forEach(ref => {
+    stepRefs.current.forEach(ref => {
       gsap.fromTo(
         ref.current,
         { opacity: 0, y: 50 },
@@ -39,18 +38,18 @@ const SectionIngredienti = () => {
       <div className='container'>
         <h1>INGREDIENTI</h1>
       </div>
-      <div ref={stepRefs[0]} className="row align-items-center mb-4">
+      <div ref={stepRefs.current[0]} className="row align-items-center mb-4">
         <div className="col-md-3 text-center text-md-right ingredienti-shape-container">
           <FormaArancione className="ingredienti-shape" />
           <span className="shape-text">LYNSIDE<sup>®</sup><br />Acty SCI</span>
         </div>
-        <div ref={stepRefs[1]} className="col-md-9 text-left">
+        <div ref={stepRefs.current[1]} className="col-md-9 text-left">
           <h2 className="ingredienti-main-title">SACCHAROMYCES</h2>
           <h2 className="highlight">Cerevisiae</h2>
           <p className="ingredienti-description">Lievito probiotico per il benessere del microbiota intestinale e della cute.</p>
         </div>
       </div>
-      <div ref={stepRefs[1]} className="row align-items-center">
+      <div ref={stepRefs.current[1]} className="row align-items-center">
         <div className="col-md-3 text-center text-md-right ingredienti-icon-container">
           <div 
             onMouseEnter={() => lottieRef.current.pause()} // Ferma l'animazione al passaggio del mouse
@@ -62,7 +61,7 @@ const SectionIngredienti = () => {
               className="ingredienti-icon" 
               loop={true}  // Imposta il loop continuo
               autoplay={true} // Avvia l'animazione automaticamente
-              style={{ width: 200, height: 200 }} // Imposta le dimensioni
+               // Imposta le dimensioni
             />
           </div>
         </div>

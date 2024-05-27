@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Slider.css';
+import '../styles/Slider.css';
 import nutritionalImage from '../assets/nutritional-info.png'; // Ensure the path is correct
 
 const slidesData = [
@@ -42,6 +42,7 @@ const Slider = () => {
 
   return (
     <div className="slider-container">
+      <h2 className="slider-title">Principi Attivi</h2> {/* Aggiungiamo il titolo */}
       <div className="slider" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         <div className="slides" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
           {slidesData.map((slide, index) => (
