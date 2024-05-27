@@ -43,7 +43,9 @@ const Header = () => {
               ACNEBIO<sup className="trademark">®</sup> <span className="highlight">PRO</span>
             </h1>
             <h2 ref={subtitleRef}>IL PRIMO CIOCCOLATO* CONTRO L'ACNE</h2>
-            <button ref={buttonRef} className="btn"><span>ACQUISTA</span></button>
+            <a href="https://roydermal.it/prodotto/acnebio-pro-stimpack/" ref={buttonRef} className="btn">
+              <span>ACQUISTA</span>
+            </a>
           </div>
         </div>
         <div className="ellisse" ref={ellisseRef}>

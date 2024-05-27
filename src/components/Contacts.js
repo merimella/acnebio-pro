@@ -1,4 +1,4 @@
-// Contact.js
+// Contacts.js
 import React from 'react';
 import './Contacts.css';
 import logo from '../assets/logo-footer.svg'; // Assicurati di avere il logo nella cartella assets
@@ -13,8 +13,12 @@ const Contact = () => {
           <p>Un prodotto Roydermmal</p>
           <p>Email: <a href="mailto:info@roydermal.it">info@roydermal.it</a></p>
           <div className="social-icons">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+            <a href="https://www.facebook.com/Roydermal/" target="_blank" rel="noopener noreferrer">
+              <FaFacebook />
+            </a>
+            <a href="https://www.instagram.com/roydermal_italia/" target="_blank" rel="noopener noreferrer">
+              <FaInstagram />
+            </a>
           </div>
         </div>
       </div>
