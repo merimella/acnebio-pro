@@ -31,7 +31,7 @@
 }
 
 .section-image {
-  width: 70%; /* Adjust size as needed */
+  width: 80%; /* Adjust size as needed */
   height: auto;
   margin-bottom: 20px;
   animation: float 5s ease-in-out infinite; /* Add floating animation */
@@ -83,12 +83,13 @@
   }
 
   .section-image {
-    width: 90%; /* Make the image larger on mobile */
+    width: 130%; /* Make the image larger on mobile */
   }
 
-  .section-paragraph {
-    font-size: 1rem;
+  .icon{
+    width: 50%;
   }
+
 
   .section-icons {
     flex-direction: row;
@@ -97,4 +98,13 @@
   .icon-item {
     margin-right: 10px;
   }
+
+  .section-paragraph {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto; /* Aggiungi questa linea per migliorare la giustificazione */
+    line-height: 1.5; /* Regola l'interlinea per una migliore leggibilità */
+  }
+
+
 }

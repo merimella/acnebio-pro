@@ -79,7 +79,7 @@ const SectionContent = () => {
     <div ref={sectionRef} className="section-content">
       <img ref={imageRef} src={acnebioImage} alt="Acnebio" className="section-image" />
       <p ref={textRef} className="section-paragraph">
-        <b>Acnebio PRO</b> è un integratore alimentare a base di probiotici vivi (Saccharomyces cerevisiae 3 miliardi per razione giornaliera), vitamine e minerali. Niacina, biotina, zinco e vitamina A contribuiscono al mantenimento di una pelle normale. Adatto a vegetariani e vegani.
+        <b>Acnebio PRO</b> <br />è un integratore alimentare a base di probiotici vivi (Saccharomyces cerevisiae 3 miliardi per razione giornaliera), vitamine e minerali. Niacina, biotina, zinco e vitamina A contribuiscono al mantenimento di una pelle normale. <br /><br />Adatto a vegetariani e vegani.
       </p>
       <div ref={iconContainerRef} className="section-icons-ellipse">
         {isMobile ? (
