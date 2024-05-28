@@ -1,7 +1,6 @@
 /* src/components/SectionIngredienti.css */
 .section-ingredienti {
   position: relative;
-  margin: 20px auto;
   font-family: 'Termina', sans-serif;
   z-index: 2; /* Ensure section ingredienti is above noise overlay */
   padding: 20px;

@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 const SectionIngredienti = () => {
   const lottieRef = useRef(null); // Crea un riferimento per l'animazione Lottie
   const sectionRef = useRef(null);
-  const stepRefs = useRef([React.createRef(), React.createRef()]);
+  const stepRefs = useRef([React.createRef(), React.createRef(), React.createRef()]); // Aggiungi un terzo ref
 
   useEffect(() => {
     stepRefs.current.forEach(ref => {
@@ -35,19 +35,18 @@ const SectionIngredienti = () => {
 
   return (
     <div ref={sectionRef} className="section-ingredienti container">
-      <h2 ref={stepRefs.current[0]} className="section-i-title">INGREDIENTI</h2> {/* Aggiungiamo il titolo */}
       <div ref={stepRefs.current[1]} className="row align-items-center mb-4">
         <div className="col-md-3 text-center text-md-right ingredienti-shape-container">
           <FormaArancione className="ingredienti-shape" />
           <span className="shape-text">LYNSIDE<sup>®</sup><br />Acty SCI</span>
         </div>
-        <div ref={stepRefs.current[2]} className="col-md-9 text-left">
+        <div className="col-md-9 text-left">
           <h2 className="ingredienti-main-title">SACCHAROMYCES</h2>
           <h2 className="highlight">Cerevisiae</h2>
           <p className="ingredienti-description">Lievito probiotico per il benessere del microbiota intestinale e della cute.</p>
         </div>
       </div>
-      <div ref={stepRefs.current[3]} className="row align-items-center">
+      <div ref={stepRefs.current[2]} className="row align-items-center">
         <div className="col-md-3 text-center text-md-right ingredienti-icon-container">
           <div 
             onMouseEnter={() => lottieRef.current.pause()} // Ferma l'animazione al passaggio del mouse

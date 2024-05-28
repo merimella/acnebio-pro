@@ -10,7 +10,9 @@
   margin: 0 auto;
   padding: 20px;
   z-index: 2; /* Ensure section content is above noise overlay */
+ 
 }
+
 
 @media (max-width: 1600px) {
   .section-content {

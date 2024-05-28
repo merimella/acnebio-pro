@@ -5,8 +5,10 @@
   top: 0;
   width: 100%;
   z-index: 3; /* Navbar above noise overlay */
-  padding: 1rem;
+  padding: 1rem 2rem; /* Adjust padding for better alignment */
   transition: background-color 0.3s, padding 0.3s;
+  display: flex;
+  align-items: center;
 }
 
 .navbar.opaque {
@@ -14,12 +16,16 @@
 }
 
 .navbar.shrink {
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+  margin-right: 2rem;
 }
 
 .nav-link {
   color: #ff5c35 !important;
-  margin: 0 1rem;
+  margin-right: 1rem;
   transition: font-size 0.3s, padding 0.3s;
   font-weight: 700;
 }
@@ -28,26 +34,13 @@
   font-size: 0.9rem;
 }
 
-.navbar-brand img {
-  height: 30px;
+.logo {
+  height: 22px; /* Slightly larger than text */
   transition: height 0.3s;
 }
 
-.navbar-brand img.shrink {
-  height: 20px;
-}
-
-.sub-link {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #ff5c35;
-  display: block;
-  margin-top: -5px;
-  transition: font-size 0.3s;
-}
-
-.navbar.shrink .sub-link {
-  font-size: 0.65rem;
+.logo.shrink {
+  height: 25px; /* Shrink logo slightly */
 }
 
 .navbar-toggler {
@@ -63,31 +56,30 @@
 
 /* Media Query for responsive design */
 @media (max-width: 768px) {
-  .navbar-brand img {
-    height: 30px;
+  .navbar {
+    padding: 0.5rem 1rem;
   }
 
-  .navbar-brand img.shrink {
-    height: 20px;
+  .navbar-brand {
+    margin-right: 0;
   }
 
   .nav-link {
-    margin: 0 0.5rem;
+    margin-right: 0;
+    font-size: 1rem;
   }
 
   .nav-link.shrink {
     font-size: 0.8rem;
   }
 
-  .sub-link {
-    font-size: 0.6rem;
+  .navbar-collapse {
+    background: rgba(8, 55, 140, 0.9);
+    padding: 1rem;
   }
 
-  .navbar.shrink .sub-link {
-    font-size: 0.5rem;
-  }
-
-  .navbar {
-    padding: 0.5rem; /* Adjust padding for smaller screens */
+  .nav-link {
+    margin: 0.5rem 0;
+    text-align: left;
   }
 }

@@ -7,6 +7,7 @@ import ciocco from '../assets/cioccolato.png';
 const Header = () => {
   const headerRef = useRef(null);
   const titleRef = useRef(null);
+  const subtitleSecondRef = useRef(null);
   const subtitleRef = useRef(null);
   const buttonRef = useRef(null);
   const imgRef = useRef(null);
@@ -18,6 +19,7 @@ const Header = () => {
     tl.fromTo(headerRef.current, { opacity: 0 }, { opacity: 1, duration: 1 })
       .fromTo(imgRef.current, { x: '-100%', opacity: 0 }, { x: '0%', opacity: 1, duration: 1 }, '-=0.5')
       .fromTo(titleRef.current, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, duration: 1 }, '-=0.5')
+      .fromTo(subtitleSecondRef.current, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, duration: 1 }, '-=0.5')
       .fromTo(subtitleRef.current, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, duration: 1 }, '-=0.5')
       .fromTo(buttonRef.current, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, duration: 1 }, '-=0.5')
       .fromTo(ellisseRef.current, { opacity: 0 }, { opacity: 1, duration: 1 }, '-=0.5'); // Animazione ellisse
@@ -42,6 +44,7 @@ const Header = () => {
             <h1 ref={titleRef}>
               ACNEBIO<sup className="trademark">®</sup> <span className="highlight">PRO</span>
             </h1>
+            <h3 ref={subtitleSecondRef}>Integratore Alimentare a base di probiotici vivi </h3>
             <h2 ref={subtitleRef}>IL PRIMO CIOCCOLATO* CONTRO L'ACNE</h2>
             <button className="btn" href="https://roydermal.it/prodotto/acnebio-pro-stimpack/" ref={buttonRef}>
               <span>ACQUISTA</span>
