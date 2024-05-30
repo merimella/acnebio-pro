@@ -41,9 +41,9 @@
 
 /* Classe aggiunta per il testo più piccolo */
 .small-text {
-  font-size: 0.8em;
-  white-space: nowrap; /* Impedisce il testo di andare a capo */
-  padding: 0 10px; /* Aumenta il padding per dare più spazio */
+  font-size: 0.7em;
+  padding: 0 20px; /* Aumenta il padding per dare più spazio */
+  color: #ff5c35;
 }
 
 /* Animazioni */
@@ -55,7 +55,7 @@
 /* Responsive styles */
 @media (max-width: 768px) {
   .modo-uso {
-    padding: 20px 10px;
+    padding: 20px 0px;
   }
 
   .modo-uso h2 {
@@ -63,7 +63,7 @@
   }
 
   .modo-uso ol li {
-    font-size: 1em;
+    font-size: 0.9em;
   }
 
   .modo-uso .icon {

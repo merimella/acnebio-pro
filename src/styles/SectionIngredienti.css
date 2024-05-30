@@ -1,7 +1,6 @@
 /* src/components/SectionIngredienti.css */
 .section-ingredienti {
   position: relative;
-  margin: 20px auto;
   font-family: 'Termina', sans-serif;
   z-index: 2; /* Ensure section ingredienti is above noise overlay */
   padding: 20px;
@@ -32,6 +31,11 @@
   text-align: center;
 }
 
+.ingredienti-reference{
+  color: #ff5c35;
+  font-size: 0.8rem;
+}
+
 .ingredienti-main-title {
   font-size: 1.5em;
   font-weight: bold;
@@ -47,14 +51,29 @@
   text-align: justify; /* Justifica il testo */
 }
 
-.section-ingredienti h1 {
-  font-size: 2.5em;
-  margin-bottom: 70px;
+
+.section-i-title {
+  font-size: 2em;
+  margin-bottom: 20px;
   color: #ff5c35; /* Colore arancione per il titolo */
-  text-transform: uppercase; /* Maiuscolo */
-  font-weight: 800; /* Peso del font 800 */
-  text-align: center; /* Center text */
+ /* Maiuscolo */
+  font-weight: 700; /* Peso del font 800 */
+  text-align: center;
+  margin-bottom: 50px;
 }
+
+.glass-animation-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.glass-animation {
+  width: 100px; /* Dimensione dell'animazione */
+  height: auto;
+}
+
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {
@@ -72,6 +91,9 @@
     margin-bottom: 10px;
   }
 
+  .ingredienti-reference{
+    text-align: center;
+  }
   .ingredienti-shape-container {
     margin-bottom: 20px; /* Add margin bottom to the orange shape */
   }
@@ -90,4 +112,12 @@
     display: block;
     text-align: center;
   }
+
+  .ingredienti-text{
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto; /* Aggiungi questa linea per migliorare la giustificazione */
+    line-height: 1.5; /* Regola l'interlinea per una migliore leggibilità */
+  }
+
 }

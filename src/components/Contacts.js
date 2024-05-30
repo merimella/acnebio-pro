@@ -1,7 +1,7 @@
 // Contacts.js
 import React from 'react';
 import '../styles/Contacts.css';
-import logo from '../assets/logo-footer.svg'; // Assicurati di avere il logo nella cartella assets
+import logo from '../assets/footer-logo.png'; // Assicurati di avere il logo nella cartella assets
 import { FaFacebook, FaInstagram } from 'react-icons/fa';
 
 const Contact = () => {

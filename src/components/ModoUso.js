@@ -39,7 +39,7 @@ const ModoUso = () => {
         <ol>
           <li ref={stepRefs.current[0]}>
             <img src={dissolveIcon} alt="Dissolve Icon" className="icon" />
-            Sciogliere il contenuto di 1 stick pack <br />
+            Sciogliere il contenuto di <br /> 1 stick pack 
             in circa mezzo bicchiere di acqua (80-100 ml) <br />
             <span className="small-text">o altra bevanda di proprio gradimento (latte, bevanda vegetale di soia, riso, mandorla, ecc.).</span>
           </li>

@@ -8,6 +8,8 @@ import SectionIngredienti from './components/SectionIngredienti';
 import Section3 from './components/Section3';
 import ModoUso from './components/ModoUso';
 import Contact from './components/Contacts'; // Importa il nuovo componente
+import Prodotto from './components/Prodotto';
+
 import './App.css';
 
 function App() {
@@ -34,6 +36,7 @@ function App() {
       <div className="noise-overlay"></div>
       <NavBar />
       <Header />
+      <Prodotto />
       <section className="section" id="section1">
         <div className="container">
           <SectionContent />

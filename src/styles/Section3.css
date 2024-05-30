@@ -40,6 +40,7 @@
   .section-3 p {
     font-size: 1em;
     margin-bottom: 10px;
+    
   }
   
   /* Stili per il layout delle colonne */
@@ -79,7 +80,10 @@
     }
   
     .section-3 p {
-      text-align: justify; /* Giustifica i paragrafi su mobile */
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto; /* Aggiungi questa linea per migliorare la giustificazione */
+    line-height: 1.5; /* Regola l'interlinea per una migliore leggibilità */
     }
   }
   

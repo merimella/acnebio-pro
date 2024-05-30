@@ -10,10 +10,26 @@
   justify-content: center; /* Centering content */
   padding: 20px; /* Add padding for smaller screens */
   z-index: 2; /* Ensure header is above noise overlay */
-  background: url(/src/assets/header-sfondo-5.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
+  
 }
+.btnh{
+
+  display: inline-block;
+  background-color: #ff5c35;
+  border: none;
+  color: #ff5c35;
+  padding: 15px 50px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+
+}
+
+
 
 .header .container {
   position: relative;
@@ -60,9 +76,17 @@
   text-align: left; /* Align text to the left */
 }
 
+.header h3 {
+  color: #ff5c35;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  text-align: left; /* Align text to the left */
+}
+
 .ellisse {
   position: absolute;
-  top: 10%;
+  top: 70%;
   right: 5%;
   width: 200px;
   height: 100px;
@@ -113,6 +137,7 @@
     padding: 40px 0;
     flex-direction: column; /* Stack elements vertically */
     align-items: flex-start; /* Align items to the left */
+    
   }
 
   .header img.img-fluid {
@@ -134,9 +159,17 @@
     font-size: 2rem; /* Adjust font size for smaller screens */
   }
 
+  .header h3 {
+    font-size: 0.9rem; /* Adjust font size for smaller screens */
+    margin-bottom: 10px;
+  }
+
   .header .btn {
     margin-bottom: 20px; /* Add margin below the button */
-    text-align: left; /* Align button text to the left */
+    display: block;
+    text-align: center;
+    width: 100%;
+    
   }
 
   .header h1 .highlight {
@@ -146,9 +179,9 @@
   }
   
   .ellisse {
-    top: 5%;
-    right: 5%;
-    width: 150px;
+    top: 110%;
+    right: 25%;
+    width: 200px;
     height: 75px;
   }
 }
