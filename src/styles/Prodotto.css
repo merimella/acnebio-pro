@@ -1,59 +1,43 @@
-/* src/styles/Prodotto.css */
+/* Prodotto.css */
 .prodotto-container {
-    position: relative;
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-  
-  .prodotto-background {
-    position: relative;
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2;
-  }
-  
-  .sfondo-prodotto {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
-  .product-image {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    max-width: 40%;
-    z-index: 2;
-  }
-  
-  @media (max-width: 768px) {
-    .product-image {
-      width: 80%;
-      
-  }
-  .sfondo-prodotto {
-    width: 200%;
-    height: auto;
-    display: block;
-   
-  }
-  .product-image {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    max-width: 70%;
-    z-index: 2;
-  }
-  
-  @media (max-width: 480px) {
-    .product-image {
-      width: 70%;
-    }
-  }
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-image: url(/src/assets/sfondo-prodotto.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
 
+.canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  filter: none; /* Assicurati che nessun filtro blur sia applicato */
+}
+
+@media (max-width: 768px) {
+  .canvas {
+    width: 70%;
+    height: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  .canvas {
+    width: 90%;
+    height: 90%;
+  }
+  .prodotto-container {
+    height: 50vh;
+  }
 }

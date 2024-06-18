@@ -49,7 +49,7 @@ const Header = () => {
               ACNEBIO<sup className="trademark">®</sup> <span className="highlight">PRO</span>
             </h1>
             <h3 ref={subtitleSecondRef}>Integratore Alimentare a base di probiotici vivi </h3>
-            <h2 ref={subtitleRef}>IL PRIMO CIOCCOLATO* CONTRO L'ACNE</h2>
+            <h2 ref={subtitleRef}>IL PRIMO CIOCCOLATO* PER LA TUA PELLE</h2>
             <button className="btn" onClick={handleButtonClick} ref={buttonRef}>
               <span>ACQUISTA</span>
             </button>

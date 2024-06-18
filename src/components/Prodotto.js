@@ -1,15 +1,27 @@
 import React from 'react';
-import '../styles/Prodotto.css'; // Assicurati di creare e collegare questo file CSS
-import prodottoImage from '../assets/sfondo-prodotto.png'; // Assicurati che il percorso sia corretto
-import exampleProductImage from '../assets/acnebio-image.png'; // Assicurati di sostituire con l'immagine reale del prodotto
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, useGLTF } from '@react-three/drei';
+import '../styles/Prodotto.css';
+//import prodottoImage from '../assets/sfondo-prodotto.png';
+import acnebioProGLB from '../assets/acnebio-pro.glb';
+
+function Model({ url }) {
+  const { scene } = useGLTF(url);
+  return <primitive object={scene} scale={2.0} />;
+}
 
 const Prodotto = () => {
   return (
     <div className="prodotto-container">
-      <div className="prodotto-background">
-        <img src={prodottoImage} alt="Sfondo Prodotto" className="sfondo-prodotto" />
-        <img src={exampleProductImage} alt="Prodotto" className="img-fluid product-image" />
-      </div>
+      
+      <Canvas className="canvas">
+        <ambientLight intensity={2} />
+        <directionalLight position={[2, 5, 2]} intensity={2} />
+        <directionalLight position={[-2, -5, -2]} intensity={2} />
+        <pointLight position={[0, 0, 5]} intensity={2} />
+        <Model url={acnebioProGLB} />
+        <OrbitControls enableZoom={false} />
+      </Canvas>
     </div>
   );
 };
