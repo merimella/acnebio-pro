@@ -89,6 +89,7 @@ const Section3 = () => {
             </h2>
             <p>Oltre il 50% dei pazienti acneici mostra un'alterazione del microbiota intestinale.</p>
             <p>Una delle cause di disbiosi intestinale è rappresentata dall'uso prolungato ed eccessivo delle terapie antibiotiche nel trattamento dell'acne, sempre meno efficaci a causa dell'antibiotico-resistenza.</p>
+            <p className='biblio'>Bowe, W.P., Logan, A.C. Acne vulgaris, probiotics and the gut-brain-skin axis - back to the future?. Gut Pathog 3, 1 (2011).</p>
           </div>
           <div className="col-md-6 text-center">
             <img

@@ -42,6 +42,9 @@
     margin-bottom: 10px;
     
   }
+  .biblio{
+    color: #ff5c35;
+  }
   
   /* Stili per il layout delle colonne */
   .section-3 .col-md-6 {

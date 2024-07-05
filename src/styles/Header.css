@@ -12,22 +12,6 @@
   z-index: 2; /* Ensure header is above noise overlay */
   
 }
-.btnh{
-
-  display: inline-block;
-  background-color: #ff5c35;
-  border: none;
-  color: #ff5c35;
-  padding: 15px 50px;
-  font-size: 1.25rem;
-  font-weight: 800;
-  border-radius: 16px;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
-
-}
 
 
 

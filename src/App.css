@@ -22,44 +22,6 @@ body, html {
   z-index: 1; /* Ensure it is above the background color but below the section content */
 }
 
-.img-fluid,
-.section-image {
-  animation: float 5s ease-in-out infinite;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-.section {
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #FFF;
-  position: relative;
-  z-index: 2; /* Ensure sections are above noise overlay */
-  padding: 20px;
-}
-
-.section h1 {
-  font-size: 3rem;
-  transition: transform 0.3s, color 0.3s;
-}
-
-.section h1:hover {
-  transform: scale(1.1);
-  color: #FFF;
-}
-
 /* Button Styles */
 .btn {
   display: inline-block;
@@ -106,43 +68,4 @@ body, html {
 
 .btn span {
   font-family: 'Termina Bold', sans-serif !important;
-}
-
-#slider {
-  margin-top: 150px;
-}
-
-/* Media Queries for responsive design */
-@media (max-width: 1200px) {
-  .container {
-    max-width: 960px;
-  }
-}
-
-@media (max-width: 992px) {
-  .container {
-    max-width: 720px;
-  }
-}
-
-@media (max-width: 768px) {
-  .container {
-    max-width: 540px;
-  }
-}
-
-@media (max-width: 576px) {
-  .container {
-    max-width: 100%;
-    padding: 0 15px;
-  }
-
-  .section {
-    height: auto; /* Adjust height for smaller screens */
-    padding: 40px 20px;
-  }
-
-  .noise-overlay {
-    z-index: -1; /* Move the noise overlay behind the content on small screens */
-  }
 }

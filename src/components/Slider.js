@@ -5,8 +5,8 @@ import nutritionalImage from '../assets/nutritional-info.png'; // Ensure the pat
 const slidesData = [
   { id: 1, title: "Niacina 54mg", description: "Mantiene l’equilibrio e il benessere della barriera idrolipidica della pelle" },
   { id: 2, title: "Zinco 7,5 mg", description: "In 14 studi comparativi, l’efficacia terapeutica dello zinco è stata equiparata agli antibiotici sistemici per l’acne" },
-  { id: 3, title: "Biotina 1200 µg ", description: "Favorisce il naturale benessere della cute. L’uso di antibiotici riduce i livelli di biotina, alterando il microbiota intestinale" },
-  { id: 4, title: "Vitamina A 450 µg", description: "E’ in grado di ridurre la produzione di sebo e contrastare la cheratinizzazione" }
+  { id: 3, title: "Biotina 450 µg ", description: "Favorisce il naturale benessere della cute. L’uso di antibiotici riduce i livelli di biotina, alterando il microbiota intestinale" },
+  { id: 4, title: "Vitamina A 1200 µg", description: "E’ in grado di ridurre la produzione di sebo e contrastare la cheratinizzazione" }
 ];
 
 const Slider = () => {

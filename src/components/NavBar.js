@@ -3,10 +3,11 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { Link as ScrollLink } from 'react-scroll';
 import logo from '../assets/logo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { NavLink } from 'react-router-dom';
 import '../styles/NavBar.css';
 
-const NavBar = () => {
+const NavBar = ({ onCartClick }) => {
   const [navbarOpaque, setNavbarOpaque] = useState(false);
   const [navbarShrink, setNavbarShrink] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -57,21 +58,19 @@ const NavBar = () => {
           >
             Ingredienti
           </ScrollLink>
-          <Nav.Link 
-            href="https://roydermal.it/chi-siamo/" 
+          <NavLink 
+            to="/chi-siamo" 
             className={`nav-link ${navbarShrink ? 'shrink' : 'expand'}`}
             onClick={() => setExpanded(false)}
           >
-            Chi siamo
-          </Nav.Link>
-          <Nav.Link 
-            href="https://roydermal.it/prodotto/acnebio-pro-stimpack/" 
-            className={`nav-link ${navbarShrink ? 'shrink' : 'expand'}`}
-            onClick={() => setExpanded(false)}
-          >
-            Shop
-          </Nav.Link>
+            Chi Siamo
+          </NavLink>
         </Nav>
+        <FontAwesomeIcon 
+          icon={faShoppingCart} 
+          style={{ color: '#ff5c35', fontSize: '1.5rem', cursor: 'pointer' }} 
+          onClick={onCartClick} 
+        />
       </Navbar.Collapse>
     </Navbar>
   );

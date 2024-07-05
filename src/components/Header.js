@@ -9,7 +9,6 @@ const Header = () => {
   const titleRef = useRef(null);
   const subtitleSecondRef = useRef(null);
   const subtitleRef = useRef(null);
-  const buttonRef = useRef(null);
   const imgRef = useRef(null);
   const ellisseRef = useRef(null);
 
@@ -21,7 +20,6 @@ const Header = () => {
       .fromTo(titleRef.current, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, duration: 1 }, '-=0.5')
       .fromTo(subtitleSecondRef.current, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, duration: 1 }, '-=0.5')
       .fromTo(subtitleRef.current, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, duration: 1 }, '-=0.5')
-      .fromTo(buttonRef.current, { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, duration: 1 }, '-=0.5')
       .fromTo(ellisseRef.current, { opacity: 0 }, { opacity: 1, duration: 1 }, '-=0.5'); // Animazione ellisse
 
     gsap.fromTo(imgRef.current, { y: 0 }, {
@@ -50,9 +48,7 @@ const Header = () => {
             </h1>
             <h3 ref={subtitleSecondRef}>Integratore Alimentare a base di probiotici vivi </h3>
             <h2 ref={subtitleRef}>IL PRIMO CIOCCOLATO* PER LA TUA PELLE</h2>
-            <button className="btn" onClick={handleButtonClick} ref={buttonRef}>
-              <span>ACQUISTA</span>
-            </button>
+            
           </div>
         </div>
         <div className="ellisse" ref={ellisseRef}>
