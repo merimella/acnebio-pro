@@ -5,7 +5,6 @@ import Cart from './Cart';
 import { Route, Routes } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import ChiSiamo from '../pages/ChiSiamo';
-import AcnebioMousse from '../pages/AcnebioMousse';
 import Checkout from '../pages/Checkout';
 
 const CartProviderWrapper = ({ isCartOpen, toggleCart }) => {
@@ -22,7 +21,6 @@ const CartProviderWrapper = ({ isCartOpen, toggleCart }) => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/chi-siamo" element={<ChiSiamo />} />
-        <Route path="/acnebio-mousse" element={<AcnebioMousse />} />
         <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </>

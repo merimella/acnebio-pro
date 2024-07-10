@@ -15,7 +15,7 @@ const Cart = ({ isOpen, onClose }) => {
         {cart.map(product => (
           <li className="list-group-item d-flex align-items-center" key={product.id}>
             <img src={product.images[0].src} alt={product.name} className="img-thumbnail" />
-            <div className="product-info">
+            <div className="product-info-cart">
               <span>{product.name}</span>
               <span>{product.price} €</span>
               <div className="quantity-controls">

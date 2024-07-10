@@ -7,7 +7,7 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import '../styles/Checkout.css';
 
 // Sostituisci con la tua chiave pubblica di Stripe
-const stripePromise = loadStripe('pk_test_51L0MYKEI7SKHVw3239WehG13ObXXEl9lguvcwr8nKw9QuuuxkkjYer5crA2JO7eM9r9oZdpRFDrPieF0Xu4cFVSI00LBhFhsAp');
+const stripePromise = loadStripe('pk_live_51L0MYKEI7SKHVw32MYFuUZSQjsHVGKGLVDdXSn9xOFupLWoaEpxBf02j71LtXQBbBEE3CX3r4wNVxFbQ2gtMbSXn00GIJ8fic7');
 
 const CheckoutForm = () => {
   const { cart } = useContext(CartContext);
@@ -237,7 +237,7 @@ const CheckoutForm = () => {
             </div>
             {formData.paymentMethod === 'paypal' && (
               <div className="form-group">
-                <PayPalScriptProvider options={{ "client-id": "AUwkY0RnO1fflNScoESs0QON9DSoiRwdlz1VRRJFtAnRiG8C0XoMwhQvAC0Sq44ukJpIZ19Mj42l4JsN" }}>
+                <PayPalScriptProvider options={{ "client-id": "AaRxJ6asHFjszfEyzrCcb1koYJ5HX1n6qhJETS0GbsCU3WjbCyd1MN_wui3nmFD0MgaSZXl3FJBhvGNo" }}>
                   <PayPalButtons style={{ layout: "horizontal" }} />
                 </PayPalScriptProvider>
               </div>

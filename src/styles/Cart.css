@@ -34,9 +34,10 @@
     margin-right: 15px;
   }
   
-  .product-info {
+  .product-info-cart {
     display: flex;
     flex-direction: column;
+    color: black;
     flex-grow: 1;
   }
   
