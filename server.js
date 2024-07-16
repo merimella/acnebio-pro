@@ -37,33 +37,7 @@ const sandboxEnvironment = new paypal.core.SandboxEnvironment(
 const client = new paypal.core.PayPalHttpClient(sandboxEnvironment);
 
 
-// Gestione Webhook WooCommerce
-app.post('/webhook-endpoint', bodyParser.urlencoded({ extended: true }), (req, res) => {
-  const payload = JSON.stringify(req.body);
-  const sigHeader = req.get('x-wc-webhook-signature');
 
-  console.log('WooCommerce Payload received:', req.body);
-  console.log('WooCommerce Signature header:', sigHeader);
-
-  if (!sigHeader) {
-    console.error('WooCommerce Signature header missing');
-    return res.status(400).send('WooCommerce Signature header missing');
-  }
-
-  const sigHash = crypto.createHmac('sha256', wooSecret).update(payload).digest('base64');
-
-  console.log('Signature hash:', sigHash);
-
-  if (sigHeader !== sigHash) {
-    console.error('WooCommerce Signature mismatch');
-    return res.status(400).send('WooCommerce Signature mismatch');
-  }
-
-  console.log('WooCommerce Webhook received and verified:', req.body);
-  // Aggiungi la logica per gestire l'ordine WooCommerce qui
-
-  res.status(200).send('WooCommerce Webhook received');
-});
 
 // Gestione Webhook Stripe
 app.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), (req, res) => {
@@ -210,4 +184,15 @@ app.get('*', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+// Serve il frontend React
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+// Aggiungi questa rotta per gestire la conferma dell'ordine
+app.get('/order-confirmation', (req, res) => {
+  const orderId = req.query.orderId;
+  res.sendFile(path.join(__dirname, 'build', 'order-confirmation.html'));
 });

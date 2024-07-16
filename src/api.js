@@ -34,3 +34,24 @@ export const createOrder = async (order) => {
 };
 
 export default api;
+
+export const getOrderById = async (id) => {
+  try {
+    const response = await api.get(`/orders/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Errore nel recupero dell\'ordine:', error);
+    throw error;
+  }
+};
+
+export const getCartDetails = async () => {
+  try {
+    const response = await api.get('/cart'); // Assicurati che questo endpoint esista e restituisca i dettagli del carrello
+    return response.data;
+  } catch (error) {
+    console.error('Errore nel recupero dei dettagli del carrello:', error);
+    throw error;
+  }
+};
+

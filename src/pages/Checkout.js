@@ -2,12 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import { CartContext } from '../contexts/CartContext';
 import { createOrder } from '../api';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, PaymentRequestButtonElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import '../styles/Checkout.css';
+import '../styles/Checkout.css';  // Importa Checkout.css per garantire che le classi siano disponibili
 
-// Sostituisci con la tua chiave pubblica di Stripe
-const stripePromise = loadStripe('pk_live_51L0MYKEI7SKHVw32MYFuUZSQjsHVGKGLVDdXSn9xOFupLWoaEpxBf02j71LtXQBbBEE3CX3r4wNVxFbQ2gtMbSXn00GIJ8fic7');
+const stripePromise = loadStripe('pk_test_51L0MYKEI7SKHVw32MYFuUZSQjsHVGKGLVDdXSn9xOFupLWoaEpxBf02j71LtXQBbBEE3CX3r4wNVxFbQ2gtMbSXn00GIJ8fic7');
 
 const CheckoutForm = () => {
   const { cart } = useContext(CartContext);
@@ -26,29 +25,14 @@ const CheckoutForm = () => {
     note: '',
     paymentMethod: 'stripe'
   });
-
-  const [paymentRequest, setPaymentRequest] = useState(null);
+  const [formValid, setFormValid] = useState(false);
 
   useEffect(() => {
-    if (stripe) {
-      const pr = stripe.paymentRequest({
-        country: 'IT',
-        currency: 'eur',
-        total: {
-          label: 'Total',
-          amount: cart.reduce((total, product) => total + product.price * product.quantity, 0) * 100,
-        },
-        requestPayerName: true,
-        requestPayerEmail: true,
-      });
-
-      pr.canMakePayment().then((result) => {
-        if (result) {
-          setPaymentRequest(pr);
-        }
-      });
-    }
-  }, [stripe, cart]);
+    const isValid = formData.firstName && formData.lastName && formData.address && formData.city &&
+      formData.state && formData.postcode && formData.country && formData.email && formData.phone &&
+      (formData.paymentMethod !== 'stripe' || (formData.paymentMethod === 'stripe' && stripe && elements));
+    setFormValid(isValid);
+  }, [formData, stripe, elements]);
 
   const handleChange = (e) => {
     setFormData({
@@ -59,6 +43,11 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formValid) {
+      alert('Per favore, completa tutti i campi richiesti.');
+      return;
+    }
 
     let paymentResult;
 
@@ -91,16 +80,73 @@ const CheckoutForm = () => {
         return;
       }
 
-      paymentResult = paymentMethod.id;
-    } else if (formData.paymentMethod === 'paypal') {
-      // L'implementazione di PayPal richiede di gestire il risultato di pagamento
-      // Utilizza PayPalButtons per ottenere il risultato e assegnalo a paymentResult
-    }
+      // Conferma del pagamento
+      const { paymentIntent, error: paymentError } = await stripe.confirmCardPayment(paymentMethod.id);
 
+      if (paymentError) {
+        console.error('Errore nel pagamento:', paymentError);
+        alert('Errore nel pagamento');
+        return;
+      }
+
+      if (paymentIntent && paymentIntent.status === 'succeeded') {
+        paymentResult = paymentIntent.id;
+      } else {
+        alert('Pagamento non riuscito');
+        return;
+      }
+
+      // Crea l'ordine su WooCommerce
+      const order = {
+        payment_method: formData.paymentMethod,
+        payment_method_title: 'Credit Card (Stripe)',
+        set_paid: true,
+        billing: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          address_1: formData.address,
+          city: formData.city,
+          state: formData.state,
+          postcode: formData.postcode,
+          country: formData.country,
+          email: formData.email,
+          phone: formData.phone,
+          note: formData.note
+        },
+        shipping: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          address_1: formData.address,
+          city: formData.city,
+          state: formData.state,
+          postcode: formData.postcode,
+          country: formData.country
+        },
+        line_items: cart.map(product => ({
+          product_id: product.id,
+          quantity: 1,
+        })),
+        transaction_id: paymentResult
+      };
+
+      try {
+        const orderResponse = await createOrder(order);
+        console.log('Ordine creato:', orderResponse);
+        alert('Ordine creato con successo!');
+        // Redireziona alla pagina di conferma dell'ordine
+        window.location.href = `/order-confirmation?orderId=${orderResponse.id}`;
+      } catch (error) {
+        console.error('Errore nella creazione dell\'ordine:', error);
+        alert('Si è verificato un errore durante la creazione dell\'ordine.');
+      }
+    }
+  };
+
+  const handlePayPalSuccess = async (details, data) => {
     // Crea l'ordine su WooCommerce
     const order = {
-      payment_method: formData.paymentMethod,
-      payment_method_title: formData.paymentMethod === 'stripe' ? 'Credit Card (Stripe)' : 'PayPal',
+      payment_method: 'paypal',
+      payment_method_title: 'PayPal',
       set_paid: true,
       billing: {
         first_name: formData.firstName,
@@ -127,13 +173,15 @@ const CheckoutForm = () => {
         product_id: product.id,
         quantity: 1,
       })),
-      transaction_id: paymentResult // Aggiungi il risultato del pagamento all'ordine
+      transaction_id: data.orderID
     };
 
     try {
       const orderResponse = await createOrder(order);
       console.log('Ordine creato:', orderResponse);
       alert('Ordine creato con successo!');
+      // Redireziona alla pagina di conferma dell'ordine
+      window.location.href = `/order-confirmation?orderId=${orderResponse.id}`;
     } catch (error) {
       console.error('Errore nella creazione dell\'ordine:', error);
       alert('Si è verificato un errore durante la creazione dell\'ordine.');
@@ -141,6 +189,24 @@ const CheckoutForm = () => {
   };
 
   const totalPrice = cart.reduce((acc, product) => acc + parseFloat(product.price), 0);
+
+  const CARD_ELEMENT_OPTIONS = {
+    style: {
+      base: {
+        color: "#32325d",
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: "antialiased",
+        fontSize: "16px",
+        "::placeholder": {
+          color: "#aab7c4"
+        }
+      },
+      invalid: {
+        color: "#fa755a",
+        iconColor: "#fa755a"
+      }
+    }
+  };
 
   return (
     <div className="container checkout-container">
@@ -180,11 +246,11 @@ const CheckoutForm = () => {
                   <input type="text" className="form-control" name="postcode" value={formData.postcode} onChange={handleChange} required />
                 </div>
                 <div className="form-group">
-                  <label>Phone</label>
+                  <label>Telefono</label>
                   <input type="text" className="form-control" name="phone" value={formData.phone} onChange={handleChange} required />
                 </div>
                 <div className="form-group">
-                  <label>Email Address</label>
+                  <label>Email</label>
                   <input type="email" className="form-control" name="email" value={formData.email} onChange={handleChange} required />
                 </div>
                 <div className="form-group">
@@ -221,12 +287,7 @@ const CheckoutForm = () => {
             </div>
             {formData.paymentMethod === 'stripe' && (
               <div className="form-group">
-                <CardElement />
-              </div>
-            )}
-            {paymentRequest && (
-              <div className="form-group">
-                <PaymentRequestButtonElement options={{ paymentRequest }} />
+                <CardElement options={CARD_ELEMENT_OPTIONS} />
               </div>
             )}
             <div className="form-group">
@@ -238,11 +299,27 @@ const CheckoutForm = () => {
             {formData.paymentMethod === 'paypal' && (
               <div className="form-group">
                 <PayPalScriptProvider options={{ "client-id": "AaRxJ6asHFjszfEyzrCcb1koYJ5HX1n6qhJETS0GbsCU3WjbCyd1MN_wui3nmFD0MgaSZXl3FJBhvGNo" }}>
-                  <PayPalButtons style={{ layout: "horizontal" }} />
+                  <PayPalButtons
+                    style={{ layout: "horizontal" }}
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        purchase_units: [{
+                          amount: {
+                            value: (totalPrice).toFixed(2),
+                          },
+                        }],
+                      });
+                    }}
+                    onApprove={(data, actions) => {
+                      return actions.order.capture().then(details => {
+                        handlePayPalSuccess(details, data);
+                      });
+                    }}
+                  />
                 </PayPalScriptProvider>
               </div>
             )}
-            <button type="submit" className="btn btn-primary btn-block">Effettua Ordine</button>
+            <button type="submit" className="btn btn-block mt-4" disabled={!formValid}>Effettua Ordine</button>
           </div>
         </div>
       </div>
