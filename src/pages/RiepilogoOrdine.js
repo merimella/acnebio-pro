@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getOrderById } from '../api';
+import { getOrderById } from '../api/api';
 
-const OrderConfirmation = () => {
+const RiepilogoOrdine = () => {
   const location = useLocation();
   const [order, setOrder] = useState(null);
   const orderId = new URLSearchParams(location.search).get('orderId');
@@ -45,4 +45,4 @@ const OrderConfirmation = () => {
   );
 };
 
-export default OrderConfirmation;
+export default RiepilogoOrdine;

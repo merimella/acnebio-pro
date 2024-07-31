@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
-import SectionContent from '../components/SectionContent';
 import Slider from '../components/Slider';
 import SectionIngredienti from '../components/SectionIngredienti';
 import Section3 from '../components/Section3';

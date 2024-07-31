@@ -1,11 +1,10 @@
-import axios from 'axios';
 import React, { useState, useContext, useEffect } from 'react';
 import { CartContext } from '../contexts/CartContext';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import '../styles/Checkout.css';
-import { getProductsByIds, createOrder } from '../api/api'; // Assicurati di avere queste funzioni corrette
+import { getProductsByIds, createOrder } from '../api/api';
 
 const stripePromise = loadStripe('pk_live_51L0MYKEI7SKHVw32MYFuUZSQjsHVGKGLVDdXSn9xOFupLWoaEpxBf02j71LtXQBbBEE3CX3r4wNVxFbQ2gtMbSXn00GIJ8fic7');
 
@@ -53,16 +52,15 @@ const CheckoutForm = () => {
     const taxRates = {
       'standard': 22,
       'tariffa-ridotta': 10,
-      // Aggiungi altre classi fiscali se necessario
     };
     const taxRate = taxRates[taxClass] || 0;
-    return price * taxRate / (100 + taxRate);
+    return price - (price / (1 + taxRate / 100)); // Calcolo dell'IVA inclusa
   };
 
-  const handlePayPalSuccess = async (details, data) => {
+  const handleOrderCreation = async (paymentResult) => {
     const order = {
-      payment_method: 'paypal',
-      payment_method_title: 'PayPal',
+      payment_method: formData.paymentMethod,
+      payment_method_title: formData.paymentMethod === 'stripe' ? 'Credit Card (Stripe)' : 'PayPal',
       set_paid: true,
       billing: {
         first_name: formData.firstName,
@@ -85,35 +83,26 @@ const CheckoutForm = () => {
         postcode: formData.postcode,
         country: formData.country
       },
-      line_items: products.map(product => {
-        const price = parseFloat(product.price);
-        const taxClass = product.tax_class;
-        const taxRate = calculateTax(price, taxClass);
-        
-        return {
-          product_id: product.id,
-          quantity: 1,
-          subtotal: (price - taxRate).toFixed(2),
-          subtotal_tax: taxRate.toFixed(2),
-          total: price.toFixed(2),
-          total_tax: taxRate.toFixed(2),
-          taxes: [
-            {
-              id: taxClass,
-              total: taxRate.toFixed(2),
-            }
-          ]
-        };
-      }),
-      transaction_id: data.orderID
+      line_items: products.map(product => ({
+        product_id: product.id,
+        quantity: 1 // Assicurati di avere la quantità corretta
+      })),
+      transaction_id: paymentResult
     };
-
+  
     try {
+      console.log('Creazione dell\'ordine con i seguenti dati:', order); // Log dei dati dell'ordine
       const orderResponse = await createOrder(order);
-      alert('Ordine creato con successo!');
-      window.location.href = `/order-confirmation?orderId=${orderResponse.id}`;
+      if (orderResponse.id) {
+        console.log('Ordine creato:', orderResponse); // Log della risposta dell'ordine
+        // Redirigi direttamente alla pagina di riepilogo ordine
+        window.location.href = `/RiepilogoOrdine?orderId=${orderResponse.id}`;
+      } else {
+        throw new Error('ID dell\'ordine non trovato nella risposta');
+      }
     } catch (error) {
       console.error('Errore nella creazione dell\'ordine:', error.response ? error.response.data : error);
+      // Gestisci l'errore in modo più elegante se possibile
       alert('Si è verificato un errore durante la creazione dell\'ordine.');
     }
   };
@@ -180,70 +169,17 @@ const CheckoutForm = () => {
       }
     }
 
-    const order = {
-      payment_method: formData.paymentMethod,
-      payment_method_title: formData.paymentMethod === 'stripe' ? 'Credit Card (Stripe)' : 'PayPal',
-      set_paid: true,
-      billing: {
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        address_1: formData.address,
-        city: formData.city,
-        state: formData.state,
-        postcode: formData.postcode,
-        country: formData.country,
-        email: formData.email,
-        phone: formData.phone,
-        note: formData.note
-      },
-      shipping: {
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        address_1: formData.address,
-        city: formData.city,
-        state: formData.state,
-        postcode: formData.postcode,
-        country: formData.country
-      },
-      line_items: products.map(product => {
-        const price = parseFloat(product.price);
-        const taxClass = product.tax_class;
-        const taxRate = calculateTax(price, taxClass);
-        
-        return {
-          product_id: product.id,
-          quantity: 1,
-          subtotal: (price - taxRate).toFixed(2),
-          subtotal_tax: taxRate.toFixed(2),
-          total: price.toFixed(2),
-          total_tax: taxRate.toFixed(2),
-          taxes: [
-            {
-              id: taxClass,
-              total: taxRate.toFixed(2),
-            }
-          ]
-        };
-      }),
-      transaction_id: paymentResult
-    };
-
-    try {
-      const orderResponse = await createOrder(order);
-      alert('Ordine creato con successo!');
-      window.location.href = `/order-confirmation?orderId=${orderResponse.id}`;
-    } catch (error) {
-      console.error('Errore nella creazione dell\'ordine:', error.response ? error.response.data : error);
-      alert('Si è verificato un errore durante la creazione dell\'ordine.');
-    }
+    await handleOrderCreation(paymentResult);
   };
 
   const totalPrice = products.reduce((acc, product) => acc + parseFloat(product.price), 0);
   const totalTax = products.reduce((acc, product) => {
     const taxClass = product.tax_class;
-    const taxRate = calculateTax(parseFloat(product.price), taxClass);
-    return acc + taxRate;
+    const tax = calculateTax(parseFloat(product.price), taxClass);
+    return acc + tax;
   }, 0);
+
+  const totalPriceWithoutTax = totalPrice - totalTax; // Totale senza IVA
 
   const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -328,9 +264,9 @@ const CheckoutForm = () => {
                 </li>
               ))}
             </ul>
-            <p className="font-weight-bold">Totale: {totalPrice.toFixed(2)} €</p>
+            <p className="font-weight-bold">Totale (senza IVA): {totalPriceWithoutTax.toFixed(2)} €</p>
             <p className="font-weight-bold">IVA: {totalTax.toFixed(2)} €</p>
-            <p className="font-weight-bold">Totale con IVA: {totalPrice.toFixed(2)} €</p>
+            <p className="font-weight-bold">Totale (con IVA): {totalPrice.toFixed(2)} €</p> {/* Mostra il totale con IVA */}
           </div>
           <div>
             <h2>Spedizione Gratuita in Italia</h2>
@@ -371,7 +307,7 @@ const CheckoutForm = () => {
                     }}
                     onApprove={(data, actions) => {
                       return actions.order.capture().then(details => {
-                        handlePayPalSuccess(details, data);
+                        handleOrderCreation(details.id); // Passa l'ID della transazione
                       });
                     }}
                   />
