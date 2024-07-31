@@ -5,7 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import '../styles/Checkout.css';
-import { getTaxClasses } from '../api'; // Importa la funzione per ottenere le classi fiscali
+import { getTaxClasses, getProductsByIds, createOrder } from '../api/api'; // Assicurati di avere queste funzioni corrette
 
 const stripePromise = loadStripe('pk_live_51L0MYKEI7SKHVw32MYFuUZSQjsHVGKGLVDdXSn9xOFupLWoaEpxBf02j71LtXQBbBEE3CX3r4wNVxFbQ2gtMbSXn00GIJ8fic7');
 
@@ -27,7 +27,7 @@ const CheckoutForm = () => {
     paymentMethod: 'stripe'
   });
   const [formValid, setFormValid] = useState(false);
-  const [taxClasses, setTaxClasses] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const isValid = formData.firstName && formData.lastName && formData.address && formData.city &&
@@ -40,17 +40,95 @@ const CheckoutForm = () => {
     const fetchTaxClasses = async () => {
       try {
         const classes = await getTaxClasses();
-        setTaxClasses(classes);
+        console.log('Classi delle tasse recuperate:', classes);
       } catch (error) {
         console.error('Errore nel recupero delle classi fiscali:', error);
       }
     };
     fetchTaxClasses();
-  }, []);
+
+    const fetchProducts = async () => {
+      try {
+        const ids = cart.map(product => product.id);
+        const products = await getProductsByIds(ids);
+        setProducts(products);
+      } catch (error) {
+        console.error('Errore nel recupero dei prodotti:', error);
+      }
+    };
+    fetchProducts();
+  }, [cart]);
 
   const calculateTax = (price, taxClass) => {
-    const taxRate = taxClasses.find(t => t.slug === taxClass)?.rate || 0;
-    return price * (taxRate / 100);
+    const taxRates = {
+      'standard': 22,
+      'tariffa-ridotta': 10,
+    };
+    const taxRate = taxRates[taxClass] || 0;
+    return price * taxRate / (100 + taxRate);
+  };
+
+  const handlePayPalSuccess = async (details, data) => {
+    const order = {
+      payment_method: 'paypal',
+      payment_method_title: 'PayPal',
+      set_paid: true,
+      billing: {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        address_1: formData.address,
+        city: formData.city,
+        state: formData.state,
+        postcode: formData.postcode,
+        country: formData.country,
+        email: formData.email,
+        phone: formData.phone,
+        note: formData.note
+      },
+      shipping: {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        address_1: formData.address,
+        city: formData.city,
+        state: formData.state,
+        postcode: formData.postcode,
+        country: formData.country
+      },
+      line_items: products.map(product => {
+        const price = parseFloat(product.price);
+        const taxClass = product.tax_class;
+        const taxRate = calculateTax(price, taxClass);
+        console.log(`Prodotto: ${product.name}, Tax Class: ${taxClass}, Tax Rate: ${taxRate}`);
+        
+        return {
+          product_id: product.id,
+          quantity: 1,
+          subtotal: (price - taxRate).toFixed(2),
+          subtotal_tax: taxRate.toFixed(2),
+          total: price.toFixed(2),
+          total_tax: taxRate.toFixed(2),
+          taxes: [
+            {
+              id: taxClass,
+              total: taxRate.toFixed(2),
+            }
+          ]
+        };
+      }),
+      transaction_id: data.orderID
+    };
+
+    console.log('Dati dell\'ordine (PayPal):', JSON.stringify(order, null, 2));
+
+    try {
+      const orderResponse = await createOrder(order);
+      console.log('Ordine creato:', orderResponse);
+      alert('Ordine creato con successo!');
+      window.location.href = `/order-confirmation?orderId=${orderResponse.id}`;
+    } catch (error) {
+      console.error('Errore nella creazione dell\'ordine:', error.response ? error.response.data : error);
+      alert('Si è verificato un errore durante la creazione dell\'ordine.');
+    }
   };
 
   const handleChange = (e) => {
@@ -99,7 +177,6 @@ const CheckoutForm = () => {
         return;
       }
 
-      // Conferma del pagamento
       const { paymentIntent, error: paymentError } = await stripe.confirmCardPayment(paymentMethod.id);
 
       if (paymentError) {
@@ -116,7 +193,6 @@ const CheckoutForm = () => {
       }
     }
 
-    // Crea l'ordine su WooCommerce
     const order = {
       payment_method: formData.paymentMethod,
       payment_method_title: formData.paymentMethod === 'stripe' ? 'Credit Card (Stripe)' : 'PayPal',
@@ -142,23 +218,26 @@ const CheckoutForm = () => {
         postcode: formData.postcode,
         country: formData.country
       },
-      line_items: cart.map(product => {
+      line_items: products.map(product => {
         const price = parseFloat(product.price);
-        const lineItem = {
+        const taxClass = product.tax_class;
+        const taxRate = calculateTax(price, taxClass);
+        console.log(`Prodotto: ${product.name}, Tax Class: ${taxClass}, Tax Rate: ${taxRate}`);
+        
+        return {
           product_id: product.id,
           quantity: 1,
-          subtotal: price.toFixed(2),
-          subtotal_tax: calculateTax(price, product.tax_class).toFixed(2),
+          subtotal: (price - taxRate).toFixed(2),
+          subtotal_tax: taxRate.toFixed(2),
           total: price.toFixed(2),
-          total_tax: calculateTax(price, product.tax_class).toFixed(2),
+          total_tax: taxRate.toFixed(2),
           taxes: [
             {
-              id: product.tax_class,
-              total: calculateTax(price, product.tax_class).toFixed(2),
+              id: taxClass,
+              total: taxRate.toFixed(2),
             }
           ]
         };
-        return lineItem;
       }),
       transaction_id: paymentResult
     };
@@ -166,86 +245,22 @@ const CheckoutForm = () => {
     console.log('Dati dell\'ordine:', JSON.stringify(order, null, 2));
 
     try {
-      const orderResponse = await axios.post('/woocommerce-api.php', {
-        endpoint: '/orders',
-        data: order
-      });
-      console.log('Ordine creato:', orderResponse.data);
+      const orderResponse = await createOrder(order);
+      console.log('Ordine creato:', orderResponse);
       alert('Ordine creato con successo!');
-      // Redireziona alla pagina di conferma dell'ordine
-      window.location.href = `/order-confirmation?orderId=${orderResponse.data.id}`;
+      window.location.href = `/order-confirmation?orderId=${orderResponse.id}`;
     } catch (error) {
       console.error('Errore nella creazione dell\'ordine:', error.response ? error.response.data : error);
       alert('Si è verificato un errore durante la creazione dell\'ordine.');
     }
   };
 
-  const handlePayPalSuccess = async (details, data) => {
-    const order = {
-      payment_method: 'paypal',
-      payment_method_title: 'PayPal',
-      set_paid: true,
-      billing: {
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        address_1: formData.address,
-        city: formData.city,
-        state: formData.state,
-        postcode: formData.postcode,
-        country: formData.country,
-        email: formData.email,
-        phone: formData.phone,
-        note: formData.note
-      },
-      shipping: {
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        address_1: formData.address,
-        city: formData.city,
-        state: formData.state,
-        postcode: formData.postcode,
-        country: formData.country
-      },
-      line_items: cart.map(product => {
-        const price = parseFloat(product.price);
-        const lineItem = {
-          product_id: product.id,
-          quantity: 1,
-          subtotal: price.toFixed(2),
-          subtotal_tax: calculateTax(price, product.tax_class).toFixed(2),
-          total: price.toFixed(2),
-          total_tax: calculateTax(price, product.tax_class).toFixed(2),
-          taxes: [
-            {
-              id: product.tax_class,
-              total: calculateTax(price, product.tax_class).toFixed(2),
-            }
-          ]
-        };
-        return lineItem;
-      }),
-      transaction_id: data.orderID
-    };
-
-    console.log('Dati dell\'ordine (PayPal):', JSON.stringify(order, null, 2));
-
-    try {
-      const orderResponse = await axios.post('/woocommerce-api.php', {
-        endpoint: '/orders',
-        data: order
-      });
-      console.log('Ordine creato:', orderResponse.data);
-      alert('Ordine creato con successo!');
-      // Redireziona alla pagina di conferma dell'ordine
-      window.location.href = `/order-confirmation?orderId=${orderResponse.data.id}`;
-    } catch (error) {
-      console.error('Errore nella creazione dell\'ordine:', error.response ? error.response.data : error);
-      alert('Si è verificato un errore durante la creazione dell\'ordine.');
-    }
-  };
-
-  const totalPrice = cart.reduce((acc, product) => acc + parseFloat(product.price), 0);
-  const totalTax = cart.reduce((acc, product) => acc + calculateTax(parseFloat(product.price), product.tax_class), 0);
+  const totalPrice = products.reduce((acc, product) => acc + parseFloat(product.price), 0);
+  const totalTax = products.reduce((acc, product) => {
+    const taxClass = product.tax_class;
+    const taxRate = calculateTax(parseFloat(product.price), taxClass);
+    return acc + taxRate;
+  }, 0);
 
   const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -324,7 +339,7 @@ const CheckoutForm = () => {
           <div className="order-summary card p-4">
             <h2>Ordine</h2>
             <ul className="list-group mb-4">
-              {cart.map(product => (
+              {products.map(product => (
                 <li className="list-group-item" key={product.id}>
                   {product.name} x1 - {product.price} €
                 </li>
@@ -332,7 +347,7 @@ const CheckoutForm = () => {
             </ul>
             <p className="font-weight-bold">Totale: {totalPrice.toFixed(2)} €</p>
             <p className="font-weight-bold">IVA: {totalTax.toFixed(2)} €</p>
-            <p className="font-weight-bold">Totale con IVA: {(totalPrice + totalTax).toFixed(2)} €</p>
+            <p className="font-weight-bold">Totale con IVA: {totalPrice.toFixed(2)} €</p>
           </div>
           <div>
             <h2>Spedizione Gratuita in Italia</h2>
@@ -365,8 +380,8 @@ const CheckoutForm = () => {
                       return actions.order.create({
                         purchase_units: [{
                           amount: {
-                            currency_code: 'EUR', // Imposta la valuta su EUR
-                            value: (totalPrice + totalTax).toFixed(2),
+                            currency_code: 'EUR',
+                            value: totalPrice.toFixed(2),
                           },
                         }],
                       });

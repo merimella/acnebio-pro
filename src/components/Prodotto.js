@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { getProductsByIds } from '../api';
+import { getProductsByIds } from '../api/api';
 import { CartContext } from '../contexts/CartContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Prodotto.css';
