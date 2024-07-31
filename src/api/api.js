@@ -17,18 +17,6 @@ const api = axios.create({
 
 console.log('API Base URL:', api.defaults.baseURL); // Debug log
 
-// Funzione per recuperare le classi fiscali
-export const getTaxClasses = async () => {
-    try {
-        const response = await api.get('/settings/tax_classes'); // Endpoint alternativo per recuperare le classi fiscali
-        console.log('Tax Classes Response:', response.data); // Debug log
-        return response.data;
-    } catch (error) {
-        console.error('Errore nel recupero delle classi fiscali:', error);
-        throw error;
-    }
-};
-
 // Funzione per recuperare i prodotti per ID, incluso tax_status e tax_class
 export const getProductsByIds = async (ids) => {
     try {

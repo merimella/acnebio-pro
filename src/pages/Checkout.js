@@ -5,7 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import '../styles/Checkout.css';
-import { getTaxClasses, getProductsByIds, createOrder } from '../api/api'; // Assicurati di avere queste funzioni corrette
+import { getProductsByIds, createOrder } from '../api/api'; // Assicurati di avere queste funzioni corrette
 
 const stripePromise = loadStripe('pk_live_51L0MYKEI7SKHVw32MYFuUZSQjsHVGKGLVDdXSn9xOFupLWoaEpxBf02j71LtXQBbBEE3CX3r4wNVxFbQ2gtMbSXn00GIJ8fic7');
 
@@ -37,16 +37,6 @@ const CheckoutForm = () => {
   }, [formData, stripe, elements]);
 
   useEffect(() => {
-    const fetchTaxClasses = async () => {
-      try {
-        const classes = await getTaxClasses();
-        console.log('Classi delle tasse recuperate:', classes);
-      } catch (error) {
-        console.error('Errore nel recupero delle classi fiscali:', error);
-      }
-    };
-    fetchTaxClasses();
-
     const fetchProducts = async () => {
       try {
         const ids = cart.map(product => product.id);
@@ -63,6 +53,7 @@ const CheckoutForm = () => {
     const taxRates = {
       'standard': 22,
       'tariffa-ridotta': 10,
+      // Aggiungi altre classi fiscali se necessario
     };
     const taxRate = taxRates[taxClass] || 0;
     return price * taxRate / (100 + taxRate);
@@ -98,7 +89,6 @@ const CheckoutForm = () => {
         const price = parseFloat(product.price);
         const taxClass = product.tax_class;
         const taxRate = calculateTax(price, taxClass);
-        console.log(`Prodotto: ${product.name}, Tax Class: ${taxClass}, Tax Rate: ${taxRate}`);
         
         return {
           product_id: product.id,
@@ -118,11 +108,8 @@ const CheckoutForm = () => {
       transaction_id: data.orderID
     };
 
-    console.log('Dati dell\'ordine (PayPal):', JSON.stringify(order, null, 2));
-
     try {
       const orderResponse = await createOrder(order);
-      console.log('Ordine creato:', orderResponse);
       alert('Ordine creato con successo!');
       window.location.href = `/order-confirmation?orderId=${orderResponse.id}`;
     } catch (error) {
@@ -222,7 +209,6 @@ const CheckoutForm = () => {
         const price = parseFloat(product.price);
         const taxClass = product.tax_class;
         const taxRate = calculateTax(price, taxClass);
-        console.log(`Prodotto: ${product.name}, Tax Class: ${taxClass}, Tax Rate: ${taxRate}`);
         
         return {
           product_id: product.id,
@@ -242,11 +228,8 @@ const CheckoutForm = () => {
       transaction_id: paymentResult
     };
 
-    console.log('Dati dell\'ordine:', JSON.stringify(order, null, 2));
-
     try {
       const orderResponse = await createOrder(order);
-      console.log('Ordine creato:', orderResponse);
       alert('Ordine creato con successo!');
       window.location.href = `/order-confirmation?orderId=${orderResponse.id}`;
     } catch (error) {
