@@ -65,6 +65,14 @@ const CheckoutForm = () => {
     return taxRateIds[taxClass] || 0; // Ritorna un ID di default se la classe non è trovata
   };
 
+  const getTaxLabel = (taxClass) => {
+    const taxLabels = {
+      'standard': 'IVA 22%',
+      'tariffa-ridotta': 'IVA 10%',
+    };
+    return taxLabels[taxClass] || 'IVA';
+  };
+
   const handleOrderCreation = async (paymentResult) => {
     const lineItems = products.map(product => ({
       product_id: product.id,
@@ -73,11 +81,44 @@ const CheckoutForm = () => {
       taxes: [
         {
           id: getTaxRateId(product.tax_class), // Utilizza l'ID corretto per la classe fiscale
-          
+          total: calculateTax(parseFloat(product.price), product.tax_class).toFixed(2),
+          subtotal: calculateTax(parseFloat(product.price), product.tax_class).toFixed(2)
         }
       ]
     }));
-  
+
+    const taxLines = products.map(product => ({
+      rate_code: `IT-IVA ${getTaxLabel(product.tax_class)}-1`,
+      rate_id: getTaxRateId(product.tax_class),
+      label: getTaxLabel(product.tax_class),
+      compound: false,
+      tax_total: calculateTax(parseFloat(product.price), product.tax_class).toFixed(2),
+      shipping_tax_total: '0.00',
+      rate_percent: parseInt(getTaxLabel(product.tax_class).match(/\d+/)[0], 10), // Estrae il tasso di percentuale dall'etichetta
+      meta_data: []
+    }));
+
+    const shippingCost = formData.country === 'Italia' ? 0 : 3.00;
+    const shippingMethodId = formData.country === 'Italia' ? 'free_shipping' : 'flat_rate';
+    const shippingMethodTitle = formData.country === 'Italia' ? 'Spedizione Gratuita' : 'Tariffa Unica';
+
+    const shippingLines = [
+      {
+        method_id: shippingMethodId, // ID del metodo di spedizione
+        method_title: shippingMethodTitle,
+        total: shippingCost.toFixed(2),
+        total_tax: '0.00',
+        taxes: [
+          {
+            id: getTaxRateId('tariffa-ridotta'), // ID fiscale per la spedizione
+            total: '0',
+            subtotal: ''
+          }
+        ],
+        meta_data: []
+      }
+    ];
+
     const order = {
       payment_method: formData.paymentMethod,
       payment_method_title: formData.paymentMethod === 'stripe' ? 'Credit Card (Stripe)' : 'PayPal',
@@ -104,9 +145,11 @@ const CheckoutForm = () => {
         country: formData.country
       },
       line_items: lineItems,
+      tax_lines: taxLines, // Aggiungi tax_lines qui
+      shipping_lines: shippingLines, // Aggiungi shipping_lines qui
       transaction_id: paymentResult
     };
-  
+
     try {
       console.log('Creazione dell\'ordine con i seguenti dati:', order);
       const orderResponse = await createOrder(order);
@@ -121,8 +164,6 @@ const CheckoutForm = () => {
       alert('Si è verificato un errore durante la creazione dell\'ordine.');
     }
   };
-  
-  
 
   const handleChange = (e) => {
     setFormData({
@@ -133,28 +174,16 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!formValid) {
       alert('Per favore, completa tutti i campi richiesti.');
       return;
     }
-  
-    const calculateShippingCost = (shippingAddress) => {
-      const { country } = shippingAddress;
-      if (country === 'IT') {
-        return 0.00;
-      }
-      const standardShippingCost = 10.00;
-      return standardShippingCost;
-    };
-  
-    const isShippingFree = formData.country === 'IT';
-    let shippingCost = calculateShippingCost(formData);
-  
+
     let paymentResult;
     try {
       const cardElement = elements.getElement(CardElement);
-  
+
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: 'card',
         card: cardElement,
@@ -170,43 +199,36 @@ const CheckoutForm = () => {
           },
         },
       });
-  
+
       if (error) {
         console.error('Errore nel metodo di pagamento:', error);
         alert('Errore nel metodo di pagamento');
         return;
       }
-  
+
       const { paymentIntent, error: paymentError } = await stripe.confirmCardPayment(paymentMethod.id);
-  
+
       if (paymentError) {
         console.error('Errore nel pagamento:', paymentError);
         alert('Errore nel pagamento');
         return;
       }
-  
+
       if (paymentIntent && paymentIntent.status === 'succeeded') {
         paymentResult = paymentIntent.id;
       } else {
         alert('Pagamento non riuscito');
         return;
       }
-  
+
     } catch (error) {
       console.error('Errore nella creazione del metodo di pagamento:', error);
       alert('Errore nella procedura di pagamento');
       return;
     }
-  
-    // Log per verificare i calcoli dei prezzi e delle tasse
-    console.log('Prodotti:', products);
-    console.log('Total Price:', totalPrice);
-    console.log('Total Tax:', totalTax);
-    console.log('Total Price With Tax:', totalPriceWithTax);
-  
+
     handleOrderCreation(paymentResult);
   };
-  
 
   const totalPrice = products.reduce((acc, product) => acc + parseFloat(product.price), 0);
   const totalTax = products.reduce((acc, product) => {
@@ -215,7 +237,11 @@ const CheckoutForm = () => {
     return acc + tax;
   }, 0);
 
-  const totalPriceWithTax = totalPrice; // Totale con IVA inclusa
+  const shippingCost = formData.country === 'Italia' ? 0 : 3.00;
+  const shippingMethodTitle = formData.country === 'Italia' ? 'Spedizione Gratuita (Consegna in 2/3 giorni lavorativi con corriere GLS)' : 'Tariffa Unica (3,00€)';
+
+  const totalPriceWithTax = totalPrice;
+  const totalPriceWithTaxAndShipping = totalPrice + shippingCost;
 
   const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -254,7 +280,14 @@ const CheckoutForm = () => {
                 </div>
                 <div className="form-group">
                   <label>Paese/Regione</label>
-                  <input type="text" className="form-control" name="country" value={formData.country} onChange={handleChange} readOnly />
+                  <select className="form-control" name="country" value={formData.country} onChange={handleChange} required>
+                    <option value="Italia">Italia</option>
+                    <option value="Francia">Francia</option>
+                    <option value="Germania">Germania</option>
+                    <option value="Spagna">Spagna</option>
+                    <option value="Portogallo">Portogallo</option>
+                    {/* Aggiungi altre opzioni di paesi europei qui */}
+                  </select>
                 </div>
                 <div className="form-group">
                   <label>Via e numero</label>
@@ -302,10 +335,12 @@ const CheckoutForm = () => {
             </ul>
             <p className="font-weight-bold">Totale (senza IVA): {(totalPrice - totalTax).toFixed(2)} €</p>
             <p className="font-weight-bold">IVA: {totalTax.toFixed(2)} €</p>
-            <p className="font-weight-bold">Totale (con IVA): {totalPriceWithTax.toFixed(2)} €</p> {/* Mostra il totale con IVA */}
+            <p className="font-weight-bold">Totale (con IVA): {totalPriceWithTax.toFixed(2)} €</p>
+            <p className="font-weight-bold">Spese di spedizione: {shippingCost.toFixed(2)} €</p>
+            <p className="font-weight-bold">Totale ordine: {totalPriceWithTaxAndShipping.toFixed(2)} €</p> {/* Mostra il totale con IVA e spese di spedizione */}
           </div>
           <div>
-            <h2>Spedizione Gratuita in Italia</h2>
+            <h2>{shippingMethodTitle}</h2>
           </div>
           <div className="payment-method">
             <h2>Pagamento</h2>
@@ -329,53 +364,61 @@ const CheckoutForm = () => {
             {formData.paymentMethod === 'paypal' && (
               <div className="form-group">
                 <PayPalScriptProvider options={{ "client-id": "AaRxJ6asHFjszfEyzrCcb1koYJ5HX1n6qhJETS0GbsCU3WjbCyd1MN_wui3nmFD0MgaSZXl3FJBhvGNo", "currency": "EUR" }}>
-                <PayPalButtons
-  style={{ layout: "horizontal" }}
-  createOrder={(data, actions) => {
-    const totalPrice = products.reduce((acc, product) => acc + parseFloat(product.price), 0);
-    const totalTax = 0; // Non calcolare le imposte separatamente
-    const totalPriceWithTax = totalPrice; // Totale già incluso di imposte
+                  <PayPalButtons
+                    style={{ layout: "horizontal" }}
+                    createOrder={(data, actions) => {
+                      const totalPrice = products.reduce((acc, product) => acc + parseFloat(product.price), 0);
+                      const totalTax = products.reduce((acc, product) => {
+                        const taxClass = product.tax_class;
+                        const tax = calculateTax(parseFloat(product.price), taxClass);
+                        return acc + tax;
+                      }, 0);
+                      const totalPriceWithTax = totalPrice; // Totale già incluso di imposte
 
-    console.log('Total Price:', totalPrice.toFixed(2));
-    console.log('Total Price With Tax:', totalPriceWithTax.toFixed(2));
+                      console.log('Total Price:', totalPrice.toFixed(2));
+                      console.log('Total Tax:', totalTax.toFixed(2));
+                      console.log('Total Price With Tax:', totalPriceWithTax.toFixed(2));
 
-    return actions.order.create({
-      purchase_units: [{
-        amount: {
-          currency_code: 'EUR',
-          value: totalPriceWithTax.toFixed(2), // Totale con IVA inclusa
-          breakdown: {
-            item_total: {
-              currency_code: 'EUR',
-              value: totalPrice.toFixed(2), // Importo totale senza tassare separatamente
-            },
-            tax_total: {
-              currency_code: 'EUR',
-              value: totalTax.toFixed(2), // Imposta totale (0)
-            }
-          }
-        },
-      }],
-    }).then((orderID) => {
-      console.log('Order Created:', orderID);
-      return orderID;
-    }).catch((error) => {
-      console.error('Error in createOrder:', error);
-    });
-  }}
-  onApprove={(data, actions) => {
-    return actions.order.capture().then(details => {
-      console.log('Order Approved:', details);
-      handleOrderCreation(details.id); // Passa l'ID della transazione
-    }).catch((error) => {
-      console.error('Error in onApprove:', error);
-    });
-  }}
-  onError={(error) => {
-    console.error('Error in PayPal Buttons:', error);
-  }}
-/>
-
+                      return actions.order.create({
+                        purchase_units: [{
+                          amount: {
+                            currency_code: 'EUR',
+                            value: totalPriceWithTax.toFixed(2), // Totale con IVA inclusa
+                            breakdown: {
+                              item_total: {
+                                currency_code: 'EUR',
+                                value: (totalPriceWithTax - totalTax).toFixed(2), // Importo totale senza IVA
+                              },
+                              tax_total: {
+                                currency_code: 'EUR',
+                                value: totalTax.toFixed(2), // Imposta totale
+                              },
+                              shipping: {
+                                currency_code: 'EUR',
+                                value: shippingCost.toFixed(2) // Spese di spedizione
+                              }
+                            }
+                          },
+                        }],
+                      }).then((orderID) => {
+                        console.log('Order Created:', orderID);
+                        return orderID;
+                      }).catch((error) => {
+                        console.error('Error in createOrder:', error);
+                      });
+                    }}
+                    onApprove={(data, actions) => {
+                      return actions.order.capture().then(details => {
+                        console.log('Order Approved:', details);
+                        handleOrderCreation(details.id); // Passa l'ID della transazione
+                      }).catch((error) => {
+                        console.error('Error in onApprove:', error);
+                      });
+                    }}
+                    onError={(error) => {
+                      console.error('Error in PayPal Buttons:', error);
+                    }}
+                  />
                 </PayPalScriptProvider>
               </div>
             )}
