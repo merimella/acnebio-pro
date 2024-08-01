@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { getProductsByIds } from '../api/api';
+import { getProductsByIds } from '../api/api.js';
 import { CartContext } from '../contexts/CartContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Prodotto.css';
@@ -18,15 +18,27 @@ const UnifiedProductSection = () => {
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
 
+  const productIds = [8067]; // Replace with your product IDs
+
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
   const textRef = useRef(null);
   const iconContainerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setIsMobile]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productIds = [8067]; // Replace with your product IDs
         const data = await getProductsByIds(productIds);
         setProducts(data);
         setLoading(false);
@@ -37,7 +49,7 @@ const UnifiedProductSection = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [productIds]);
 
   useEffect(() => {
     gsap.fromTo(
@@ -111,7 +123,7 @@ const UnifiedProductSection = () => {
             <p className="section-paragraph">
               Integratore alimentare a base di probiotici vivi (Saccharomyces cerevisiae 3 miliardi per razione giornaliera), vitamine e minerali. Niacina, biotina, zinco e vitamina A contribuiscono al mantenimento di una pelle normale.
             </p>
-            <div className="section-icons-ellipse" ref={iconContainerRef}>
+            <div className="section-icons-ellipse">
               <div className="d-flex justify-content-between">
                 <div className="icon-item text-center">
                   <img src={glutenFreeIcon} alt="Senza Glutine" className="icon" />
@@ -128,6 +140,7 @@ const UnifiedProductSection = () => {
               </div>
             </div>
             <p className="product-price">{product.price} €</p>
+            <p>Classe di tassa: {product.tax_class}</p>
             <div className="d-flex align-items-center my-3">
               <div className="quantity-selector d-flex align-items-center">
                 <button onClick={() => handleQuantityChange(-1)}>-</button>

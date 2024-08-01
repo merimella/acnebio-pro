@@ -54,10 +54,30 @@ const CheckoutForm = () => {
       'tariffa-ridotta': 10,
     };
     const taxRate = taxRates[taxClass] || 0;
-    return price - (price / (1 + taxRate / 100)); // Calcolo dell'IVA inclusa
+    return (price * taxRate) / (100 + taxRate); // Calcola l'IVA inclusa
+  };
+
+  const getTaxRateId = (taxClass) => {
+    const taxRateIds = {
+      'standard': 122, // ID fiscale per la classe standard
+      'tariffa-ridotta': 5, // ID fiscale per la classe tariffa-ridotta
+    };
+    return taxRateIds[taxClass] || 0; // Ritorna un ID di default se la classe non è trovata
   };
 
   const handleOrderCreation = async (paymentResult) => {
+    const lineItems = products.map(product => ({
+      product_id: product.id,
+      quantity: 1,
+      total: parseFloat(product.price).toFixed(2), // Prezzo con IVA inclusa
+      taxes: [
+        {
+          id: getTaxRateId(product.tax_class), // Utilizza l'ID corretto per la classe fiscale
+          
+        }
+      ]
+    }));
+  
     const order = {
       payment_method: formData.paymentMethod,
       payment_method_title: formData.paymentMethod === 'stripe' ? 'Credit Card (Stripe)' : 'PayPal',
@@ -83,29 +103,26 @@ const CheckoutForm = () => {
         postcode: formData.postcode,
         country: formData.country
       },
-      line_items: products.map(product => ({
-        product_id: product.id,
-        quantity: 1 // Assicurati di avere la quantità corretta
-      })),
+      line_items: lineItems,
       transaction_id: paymentResult
     };
   
     try {
-      console.log('Creazione dell\'ordine con i seguenti dati:', order); // Log dei dati dell'ordine
+      console.log('Creazione dell\'ordine con i seguenti dati:', order);
       const orderResponse = await createOrder(order);
       if (orderResponse.id) {
-        console.log('Ordine creato:', orderResponse); // Log della risposta dell'ordine
-        // Redirigi direttamente alla pagina di riepilogo ordine
+        console.log('Ordine creato:', orderResponse);
         window.location.href = `/RiepilogoOrdine?orderId=${orderResponse.id}`;
       } else {
         throw new Error('ID dell\'ordine non trovato nella risposta');
       }
     } catch (error) {
       console.error('Errore nella creazione dell\'ordine:', error.response ? error.response.data : error);
-      // Gestisci l'errore in modo più elegante se possibile
       alert('Si è verificato un errore durante la creazione dell\'ordine.');
     }
   };
+  
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -116,21 +133,28 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!formValid) {
       alert('Per favore, completa tutti i campi richiesti.');
       return;
     }
-
-    let paymentResult;
-
-    if (formData.paymentMethod === 'stripe') {
-      if (!stripe || !elements) {
-        return;
+  
+    const calculateShippingCost = (shippingAddress) => {
+      const { country } = shippingAddress;
+      if (country === 'IT') {
+        return 0.00;
       }
-
+      const standardShippingCost = 10.00;
+      return standardShippingCost;
+    };
+  
+    const isShippingFree = formData.country === 'IT';
+    let shippingCost = calculateShippingCost(formData);
+  
+    let paymentResult;
+    try {
       const cardElement = elements.getElement(CardElement);
-
+  
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: 'card',
         card: cardElement,
@@ -146,31 +170,43 @@ const CheckoutForm = () => {
           },
         },
       });
-
+  
       if (error) {
         console.error('Errore nel metodo di pagamento:', error);
         alert('Errore nel metodo di pagamento');
         return;
       }
-
+  
       const { paymentIntent, error: paymentError } = await stripe.confirmCardPayment(paymentMethod.id);
-
+  
       if (paymentError) {
         console.error('Errore nel pagamento:', paymentError);
         alert('Errore nel pagamento');
         return;
       }
-
+  
       if (paymentIntent && paymentIntent.status === 'succeeded') {
         paymentResult = paymentIntent.id;
       } else {
         alert('Pagamento non riuscito');
         return;
       }
+  
+    } catch (error) {
+      console.error('Errore nella creazione del metodo di pagamento:', error);
+      alert('Errore nella procedura di pagamento');
+      return;
     }
-
-    await handleOrderCreation(paymentResult);
+  
+    // Log per verificare i calcoli dei prezzi e delle tasse
+    console.log('Prodotti:', products);
+    console.log('Total Price:', totalPrice);
+    console.log('Total Tax:', totalTax);
+    console.log('Total Price With Tax:', totalPriceWithTax);
+  
+    handleOrderCreation(paymentResult);
   };
+  
 
   const totalPrice = products.reduce((acc, product) => acc + parseFloat(product.price), 0);
   const totalTax = products.reduce((acc, product) => {
@@ -179,7 +215,7 @@ const CheckoutForm = () => {
     return acc + tax;
   }, 0);
 
-  const totalPriceWithoutTax = totalPrice - totalTax; // Totale senza IVA
+  const totalPriceWithTax = totalPrice; // Totale con IVA inclusa
 
   const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -264,9 +300,9 @@ const CheckoutForm = () => {
                 </li>
               ))}
             </ul>
-            <p className="font-weight-bold">Totale (senza IVA): {totalPriceWithoutTax.toFixed(2)} €</p>
+            <p className="font-weight-bold">Totale (senza IVA): {(totalPrice - totalTax).toFixed(2)} €</p>
             <p className="font-weight-bold">IVA: {totalTax.toFixed(2)} €</p>
-            <p className="font-weight-bold">Totale (con IVA): {totalPrice.toFixed(2)} €</p> {/* Mostra il totale con IVA */}
+            <p className="font-weight-bold">Totale (con IVA): {totalPriceWithTax.toFixed(2)} €</p> {/* Mostra il totale con IVA */}
           </div>
           <div>
             <h2>Spedizione Gratuita in Italia</h2>
@@ -293,24 +329,53 @@ const CheckoutForm = () => {
             {formData.paymentMethod === 'paypal' && (
               <div className="form-group">
                 <PayPalScriptProvider options={{ "client-id": "AaRxJ6asHFjszfEyzrCcb1koYJ5HX1n6qhJETS0GbsCU3WjbCyd1MN_wui3nmFD0MgaSZXl3FJBhvGNo", "currency": "EUR" }}>
-                  <PayPalButtons
-                    style={{ layout: "horizontal" }}
-                    createOrder={(data, actions) => {
-                      return actions.order.create({
-                        purchase_units: [{
-                          amount: {
-                            currency_code: 'EUR',
-                            value: totalPrice.toFixed(2),
-                          },
-                        }],
-                      });
-                    }}
-                    onApprove={(data, actions) => {
-                      return actions.order.capture().then(details => {
-                        handleOrderCreation(details.id); // Passa l'ID della transazione
-                      });
-                    }}
-                  />
+                <PayPalButtons
+  style={{ layout: "horizontal" }}
+  createOrder={(data, actions) => {
+    const totalPrice = products.reduce((acc, product) => acc + parseFloat(product.price), 0);
+    const totalTax = 0; // Non calcolare le imposte separatamente
+    const totalPriceWithTax = totalPrice; // Totale già incluso di imposte
+
+    console.log('Total Price:', totalPrice.toFixed(2));
+    console.log('Total Price With Tax:', totalPriceWithTax.toFixed(2));
+
+    return actions.order.create({
+      purchase_units: [{
+        amount: {
+          currency_code: 'EUR',
+          value: totalPriceWithTax.toFixed(2), // Totale con IVA inclusa
+          breakdown: {
+            item_total: {
+              currency_code: 'EUR',
+              value: totalPrice.toFixed(2), // Importo totale senza tassare separatamente
+            },
+            tax_total: {
+              currency_code: 'EUR',
+              value: totalTax.toFixed(2), // Imposta totale (0)
+            }
+          }
+        },
+      }],
+    }).then((orderID) => {
+      console.log('Order Created:', orderID);
+      return orderID;
+    }).catch((error) => {
+      console.error('Error in createOrder:', error);
+    });
+  }}
+  onApprove={(data, actions) => {
+    return actions.order.capture().then(details => {
+      console.log('Order Approved:', details);
+      handleOrderCreation(details.id); // Passa l'ID della transazione
+    }).catch((error) => {
+      console.error('Error in onApprove:', error);
+    });
+  }}
+  onError={(error) => {
+    console.error('Error in PayPal Buttons:', error);
+  }}
+/>
+
                 </PayPalScriptProvider>
               </div>
             )}
